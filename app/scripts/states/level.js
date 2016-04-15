@@ -3,11 +3,13 @@
 define(['phaser', 
         'prefabs/creature', 
         'config',
-        'behaviors/nodes/move'
+        'behaviors/nodes/move',
+        'behaviors/nodes/wander'
         ], function(Phaser, 
                     Creature, 
                     Config,
-                    Move) {
+                    Move,
+                    Wander) {
     var sheep;
     function Level() {}
     
@@ -30,10 +32,8 @@ define(['phaser',
             
             this.map.putTile(this.grassHsh.halfMature, 3, 4);
             
-            var routine = new Move(this.game, 320, 16*5);
+            var routine = new Wander(this.game);
             sheep.setBehavior(routine);
-            // sheep.update();
-            console.log(1);
         },
         
         // update: function() {

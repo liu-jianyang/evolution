@@ -6,7 +6,6 @@ define(['phaser',
     'use strict';
     var move, self;
     function Wander(game) {
-        console.log('Wander constructor');
         Behavior.call(this, game);
         var dest = randomDest(game);
         move = new Move(game, dest.x, dest.y);
@@ -19,6 +18,7 @@ define(['phaser',
     Wander.prototype.parent = Behavior.prototype;
     
     Wander.prototype.start = function() {
+        this.parent.start();
         move.start();
     }
     
@@ -37,6 +37,7 @@ define(['phaser',
     Wander.prototype.reset = function() {
         var dest = randomDest(this.game);
         move = new Move(this.game, dest.x, dest.y);
+        this.start();
     }
     
     var randomDest = function(game) {

@@ -8,7 +8,7 @@ define(['phaser', 'config'], function(Phaser, Config) {
     Behavior.prototype.constructor = Behavior;
     
     Behavior.prototype.start = function() {
-        console.log('Starting routine');
+        console.log('Starting routine:', this.constructor.name);
         this.state = 'Running';
     }
     
@@ -21,12 +21,12 @@ define(['phaser', 'config'], function(Phaser, Config) {
     }
 
     Behavior.prototype.succeed = function() {
-        console.log('Behavior success');
+        console.log('Routine %s succeeded', this.constructor.name);
         this.state = 'Success';
     }
 
     Behavior.prototype.fail = function() {
-        console.log('Behavior fail');
+        console.log('Routine %s failed', this.constructor.name);
         this.state = 'Failure';
     }
 
@@ -39,7 +39,6 @@ define(['phaser', 'config'], function(Phaser, Config) {
     }
 
      Behavior.prototype.isRunning = function() {
-        console.log('isRunning:', this.state);
         return this.state === 'Running';
     }
 

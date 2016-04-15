@@ -49,7 +49,6 @@ define(['phaser', 'config'], function(Phaser, Config) {
     };
 
     Creature.prototype.getHungry = function() {
-        console.log('hunger', this.HUNGER);
         this.HUNGER = this.HUNGER - Creature.HUNGER_RATE;
         if (this.HUNGER === 0) {
             console.log('Creature dies');
@@ -79,8 +78,8 @@ define(['phaser', 'config'], function(Phaser, Config) {
         if (this.behavior.isSuccess()) {
             return;
         }
-        console.log('creature update', this.behavior.getState());
         if (this.behavior && this.behavior.getState() == null) {
+            console.log('Starting behavior');
             // hasn't started yet so we start it
             this.behavior.start();
         }
