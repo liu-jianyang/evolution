@@ -20,6 +20,12 @@ define([], function() {
             }
         };
     }
+    
+    Config.prototype.getRelativeGameSize = function() {
+        var x = this.options.gameSize.x / this.options.tileSize;
+        var y = this.options.gameSize.y / this.options.tileSize;
+        return {x: x, y: y};
+    }
 
     Config.prototype.setMusicVolume = function(volume) {
         this.options.musicVolume = volume;

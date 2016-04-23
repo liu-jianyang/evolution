@@ -1,12 +1,12 @@
 'use strict';
 
 define(['phaser', 
-        'prefabs/creature', 
+        'prefabs/sheep', 
         'config',
         'behaviors/nodes/move',
         'behaviors/nodes/wander'
         ], function(Phaser, 
-                    Creature, 
+                    Sheep, 
                     Config,
                     Move,
                     Wander) {
@@ -27,14 +27,13 @@ define(['phaser',
             //create layer
             this.backgroundLayer = this.map.createLayer('background');
             this.backgroundLayer.resizeWorld();
-            sheep = new Creature(this.game, 5*Config.options.tileSize, 7*Config.options.tileSize, 'sheep', 'deadsheep', this.map);
+            sheep = new Sheep(this.game, 5*Config.options.tileSize, 7*Config.options.tileSize, this.map);
             this.game.add.existing(sheep);
             
             this.map.putTile(this.grassHsh.halfMature, 3, 4);
             var tile = this.map.getTile(3, 4);
 
             tile.properties.type = 'grass';
-            console.log('tile:', this.map.getTile(3, 4));
         },
         
         // update: function() {

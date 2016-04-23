@@ -2,7 +2,6 @@ define(['phaser', 'behaviors/behavior', 'config'], function(Phaser, Behavior, Co
     'use strict';
     var destX, destY, self;
     function Move(game, x, y) {
-        console.log('Move constructor');
         Behavior.call(this, game);
         destX = x;
         destY = y;
@@ -31,8 +30,8 @@ define(['phaser', 'behaviors/behavior', 'config'], function(Phaser, Behavior, Co
     }
     
     var isCreatureAtDestination = function(creature) {
-        return Phaser.Math.fuzzyEqual(destX, creature.getX(), Config.options.tileSize) && 
-               Phaser.Math.fuzzyEqual(destY, creature.getY(), Config.options.tileSize);
+        return Phaser.Math.fuzzyEqual(destX, creature.getX(), 1) && 
+               Phaser.Math.fuzzyEqual(destY, creature.getY(), 1);
     }
     
     var moveCreature = function(creature) {

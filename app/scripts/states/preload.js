@@ -5,7 +5,7 @@ define(['phaser', 'config'], function(Phaser, Config) {
     
     Preload.prototype = {
         preload: function() {
-            console.log('a');
+            console.log('Preloading...');
             this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
             this.game.scale.setScreenSize(true);
             

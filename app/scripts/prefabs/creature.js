@@ -1,20 +1,15 @@
 define(['phaser', 
         'config',
-        'behaviors/nodes/move',
-        'behaviors/nodes/wander'
         ], function(Phaser, 
                     Config,
                     Move,
                     Wander) {
     'use strict';
-    var behavior;
-    function Creature(game, x, y, imageRef, deadRef, map) {
+    function Creature(game, x, y, imageRef, deadRef) {
         this.sprite = Phaser.Sprite.call(this, game, x, y, imageRef);
         // this.anchor.setTo(0.5, 0.5);
-        this.HUNGER = 80;
         this.deadRef = deadRef;
-        this.map = map;
-        this.setBehavior(new Wander(this.game));
+        this.notifyHunger = [false, false, false];
     }
 
     Creature.prototype = Object.create(Phaser.Sprite.prototype);
@@ -23,72 +18,118 @@ define(['phaser',
     Creature.WIDTH = 32;
     Creature.HEIGHT = 29;
     Creature.MOVE_DURATION = 150;
-    Creature.SPEED = 1;
-    Creature.DISTANCE_COVERED = Creature.SPEED * Config.options.tileSize;
     Creature.MAX_HUNGER = 100;
-    Creature.HUNGER_RATE = 1;
-    Creature.FOOD_TYPES = ['grass'];
+    Creature.DEFAULT_SPEED = 1;
+    Creature.DEFAULT_HUNGER_RATE = -1;
+    
+    Creature.prototype.setHunger = function(hunger) {
+        Creature.HUNGER = hunger;
+    }
+    
+    Creature.prototype.getHunger = function() {
+        return Creature.HUNGER;
+    }
+    
+    Creature.prototype.changeHunger = function(num) {
+        Creature.HUNGER += num;
+    }
 
+    Creature.prototype.setHungerRate = function(rate) {
+        Creature.HUNGER_RATE = rate;
+    }
+    
+    Creature.prototype.getHungerRate = function() {
+        return Creature.HUNGER_RATE || Creature.DEFAULT_HUNGER_RATE;
+    }
+    
+    Creature.prototype.setSpeed = function(rate) {
+        Creature.SPEED = rate;
+    }
+    
+    Creature.prototype.getSpeed = function() {
+        return Creature.SPEED || Creature.DEFAULT_SPEED;
+    }
+
+    Creature.prototype.setX = function(position) {
+        this.x = this.x * Config.options.tileSize;
+    }
     
     Creature.prototype.getX = function() {
-        return this.x;
+        return this.x / Config.options.tileSize;
+    }
+    
+    Creature.prototype.setY = function(position) {
+        this.y = this.y * Config.options.tileSize;
     }
     
     Creature.prototype.getY = function() {
-        return this.y;
+        return this.y / Config.options.tileSize;
     }
     
     Creature.prototype.getFoodOptions = function() {
-        
+        return Creature.FOOD_TYPES;
+    }
+    
+    Creature.prototype.setFoodOptions = function(food) {
+        if (!Creature.FOOD_TYPES) {
+            Creature.FOOD_TYPES = [];
+        }
+        if (typeof(food) === 'string') {
+            Creature.FOOD_TYPES.push(food);
+        } else {
+            Creature.FOOD_TYPES.concat(food);
+        }
     }
     
     //creature movement
     Creature.prototype.move = function(direction) {
-        // this.animations.play(direction);
+        var distanceCovered = this.getSpeed() * Config.options.tileSize;
+        this.playAnimation(direction);
         switch(direction) {
             case 'North':
-                this.y += Creature.DISTANCE_COVERED;
+                this.y += distanceCovered;
                 break;
             case 'South':
-                this.y -= Creature.DISTANCE_COVERED;
+                this.y -= distanceCovered;
                 break;
             case 'East':
-                this.x += Creature.DISTANCE_COVERED;
+                this.x += distanceCovered;
                 break;
             case 'West':
-                this.x -= Creature.DISTANCE_COVERED;
+                this.x -= distanceCovered;
                 break;
             default:
                 break;
         }
         this.getHungry();
     };
+    
+    Creature.prototype.playAnimation = function(direction) {
+        //to be overridden
+    }
 
     Creature.prototype.getHungry = function() {
-        this.HUNGER = this.HUNGER - Creature.HUNGER_RATE;
-        this.eat();
-        if (this.HUNGER === 0) {
-            console.log('Creature dies');
-            this.die();
-        } else if (this.HUNGER < 10) {
-            console.log('Starving to death');
-        } else if (this.HUNGER < 20) {
-            console.log('Near starving');
-        } else if (this.HUNGER < 50) {
-            console.log('Getting hungry...');
-            this.setBehavior(new Move(this.game, 3*32, 4*32));
+        if (this.getHunger()) {
+            this.changeHunger(this.getHungerRate());
+            if (this.getHunger() === 0) {
+                console.log('Creature dies');
+                this.die();
+            } else if (this.getHunger() < 10 && !this.notifyHunger[2]) {
+                console.log('Starving to death');
+                this.notifyHunger[2] = true;
+            } else if (this.getHunger() < 20 && !this.notifyHunger[1]) {
+                console.log('Near starving');
+                this.notifyHunger[1] = true;
+            } else if (this.getHunger() < 50 && !this.notifyHunger[0]) {
+                console.log('Getting hungry...');
+                this.notifyHunger[0] = true;
+            }
         }
+        
     }
     
     Creature.prototype.eat = function() {
-        //if hungry and can eat tile or whatever's on tile, eat
-        if (this.HUNGER < 50) {
-            var tile = this.map.getTile(this.x / 32, this.y / 32);
-            if (tile && tile.properties && tile.properties.type && Creature.FOOD_TYPES.indexOf(tile.properties.type) !== -1) {
-                this.HUNGER += 20;
-                console.log('Eat food');
-            }
-        }
+        //to be overridden
     }
     
     Creature.prototype.isAlive = function() {
@@ -108,16 +149,13 @@ define(['phaser',
     
     Creature.prototype.update = function() {
         if (this.alive) {
-            // if (this.behavior.isSuccess()) {
-            //     this.behavior.reset();
-            // }
-            if (this.behavior && this.behavior.getState() == null) {
-                console.log('Starting behavior');
-                // hasn't started yet so we start it
-                this.behavior.start();
+            if (this.behavior) {
+                if (this.behavior.getState() == null) {
+                    // hasn't started yet so we start it
+                    this.behavior.start();
+                }
+                this.behavior.act(this);
             }
-    
-            this.behavior.act(this);
         }
     }
     

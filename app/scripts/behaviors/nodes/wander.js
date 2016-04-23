@@ -18,6 +18,7 @@ define(['phaser',
     Wander.prototype.parent = Behavior.prototype;
     
     Wander.prototype.start = function() {
+        console.log('start');
         this.parent.start();
         move.start();
     }
@@ -41,10 +42,16 @@ define(['phaser',
         this.start();
     }
     
+    /*
+     * Returns a random destination within boundaries
+     * integerInRange is inclusive, so need to subtract
+     * maximum by one
+    */
     var randomDest = function(game) {
+        var size = Config.getRelativeGameSize();
         return {
-            x: game.rnd.integerInRange(0, Config.options.gameSize.x), 
-            y: game.rnd.integerInRange(0, Config.options.gameSize.y)
+            x: game.rnd.integerInRange(0, size.x - 1), 
+            y: game.rnd.integerInRange(0, size.y - 1)
         };
     }
 
