@@ -29,6 +29,7 @@ define(['phaser',
         move.act(creature);
         if (move.isSuccess()) {
             this.succeed();
+            this.reset(); //continuous wander
         } else if (move.isFailure()) {
             this.fail();
         }

@@ -19,6 +19,7 @@ define(['phaser', 'config'], function(Phaser, Config) {
             this.load.image('gameTiles', '/app/data/images/sprites/tileset.png');
             this.load.image('player', '/app/data/images/sprites/player.png');
             this.load.image('sheep', '/app/data/images/sprites/sheep front.png');
+            this.load.image('deadsheep', '/app/data/images/sprites/sheep back.png');
         },
         
         create: function() {

@@ -27,13 +27,14 @@ define(['phaser',
             //create layer
             this.backgroundLayer = this.map.createLayer('background');
             this.backgroundLayer.resizeWorld();
-            sheep = new Creature(this.game, 5*Config.options.tileSize, 7*Config.options.tileSize, 'sheep');
+            sheep = new Creature(this.game, 5*Config.options.tileSize, 7*Config.options.tileSize, 'sheep', 'deadsheep', this.map);
             this.game.add.existing(sheep);
             
             this.map.putTile(this.grassHsh.halfMature, 3, 4);
-            
-            var routine = new Wander(this.game);
-            sheep.setBehavior(routine);
+            var tile = this.map.getTile(3, 4);
+
+            tile.properties.type = 'grass';
+            console.log('tile:', this.map.getTile(3, 4));
         },
         
         // update: function() {
