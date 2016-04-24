@@ -23,16 +23,16 @@ define(['phaser', 'behaviors/behavior', 'config'], function(Phaser, Behavior, Co
                 moveCreature(creature);
             }
         }
-    }
+    };
     
     MoveTo.prototype.reset = function() {
         self.start();
-    }
+    };
     
     var isCreatureAtDestination = function(creature) {
         return Phaser.Math.fuzzyEqual(destX, creature.getX(), 1) && 
                Phaser.Math.fuzzyEqual(destY, creature.getY(), 1);
-    }
+    };
     
     var moveCreature = function(creature) {
         if (destX != creature.getX()) {
@@ -54,8 +54,7 @@ define(['phaser', 'behaviors/behavior', 'config'], function(Phaser, Behavior, Co
         if(isCreatureAtDestination(creature)) {
             self.succeed();
         }
-    }
-
+    };
 
     return MoveTo;
 });

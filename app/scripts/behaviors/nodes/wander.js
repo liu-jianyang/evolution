@@ -20,7 +20,7 @@ define(['phaser',
     Wander.prototype.start = function() {
         self.parent.start();
         moveTo.start();
-    }
+    };
     
     Wander.prototype.act = function(creature) {
         if (!moveTo.isRunning()) {
@@ -33,13 +33,13 @@ define(['phaser',
         } else if (moveTo.isFailure()) {
             self.fail();
         }
-    }
+    };
     
     Wander.prototype.reset = function() {
         var dest = randomDest(self.game);
         moveTo = new MoveTo(self.game, dest.x, dest.y);
         self.start();
-    }
+    };
     
     /*
      * Returns a random destination within boundaries
@@ -52,7 +52,7 @@ define(['phaser',
             x: game.rnd.integerInRange(0, size.x - 1), 
             y: game.rnd.integerInRange(0, size.y - 1)
         };
-    }
+    };
 
     return Wander;
 });

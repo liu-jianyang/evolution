@@ -46,11 +46,11 @@ define(['phaser', 'behaviors/behavior', 'underscore', 'config'], function(Phaser
                 throw new Error ('Nothing else has been defined yet');
             }
         }
-    }
+    };
     
     Search.prototype.reset = function() {
         self.start();
-    }
+    };
 
     return Search;
 });

@@ -22,7 +22,7 @@ define(['phaser',
     
     Sheep.prototype.playAnimation = function(direction) {
         // this.animations.play(direction);
-    }
+    };
     
     Sheep.prototype.eat = function() {
         //if hungry and can eat tile or whatever's on tile, eat
@@ -33,7 +33,7 @@ define(['phaser',
                 console.log('Eat food');
             }
         }
-    }
+    };
     
     return Sheep;
 });
