@@ -20,7 +20,7 @@ require.config({
         phaser: '../bower_components/phaser-official/build/phaser',
         almond: '../bower_components/almond/almond',
         'phaser-official': '../bower_components/phaser-official/build/phaser',
-        underscore: '../node_modules/underscore/underscore-min.js'
+        underscore: '../../node_modules/underscore/underscore-min'
     },
     shim: {
         bootstrapAffix: {
