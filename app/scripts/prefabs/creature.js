@@ -145,7 +145,7 @@ define(['phaser',
     
     Creature.prototype.setBehavior = function(behavior) {
         this.behavior = behavior;
-        this.timeoutBehavior = doEveryTimeout(this.behavior.act, 1000, this);
+        this.timeoutBehavior = Config.doEveryTimeout(this.behavior.act, 500, this);
     }
     
     Creature.prototype.update = function() {
@@ -159,18 +159,6 @@ define(['phaser',
             }
         };
         
-    }
-    
-    var doEveryTimeout = function(fction, timeout, params) {
-        var variable;
-        return function() {
-            if (!variable) {
-                fction(params);
-                variable = setTimeout(function() {
-                    variable = undefined;
-                }, timeout);
-            }
-        }
     }
     
     return Creature;

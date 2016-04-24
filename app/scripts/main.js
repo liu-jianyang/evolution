@@ -19,7 +19,8 @@ require.config({
         requirejs: '../bower_components/requirejs/require',
         phaser: '../bower_components/phaser-official/build/phaser',
         almond: '../bower_components/almond/almond',
-        'phaser-official': '../bower_components/phaser-official/build/phaser'
+        'phaser-official': '../bower_components/phaser-official/build/phaser',
+        underscore: '../node_modules/underscore/underscore-min.js'
     },
     shim: {
         bootstrapAffix: {
@@ -91,6 +92,9 @@ require.config({
         },
         phaser: {
             exports: 'Phaser'
+        },
+        underscore: {
+            exports: '_'
         }
     }
 });

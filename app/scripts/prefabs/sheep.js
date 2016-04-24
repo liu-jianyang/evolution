@@ -2,15 +2,17 @@ define(['phaser',
         'prefabs/creature', 
         'behaviors/nodes/move',
         'behaviors/nodes/wander', 
-        'config'], function(Phaser, Creature, Move, Wander, Config) {
+        'behaviors/nodes/search', 
+        'config'], function(Phaser, Creature, Move, Wander, Search, Config) {
     'use strict';
 
-    function Sheep(game, x, y, map) {
+    function Sheep(game, x, y) {
         var imageRef = 'sheep';
         var deadRef = 'deadsheep';
         Creature.call(this, game, x, y, imageRef, deadRef);
-        this.setBehavior(new Wander(this.game));
+        this.setBehavior(new Search(this.game, {type: 'tile', element: 'grass'}));
         this.setHunger(80);
+        this.setFoodOptions('grass');
     }
 
     Config.inheritPrototype(Sheep, Creature);
