@@ -37,6 +37,7 @@ define(['phaser', 'behaviors/behavior', 'underscore', 'config'], function(Phaser
                     }
                 });
                 if (locations.length > 0) {
+                    // self.returnElements = locations;
                     self.succeed();
                 } else {
                     self.fail();
