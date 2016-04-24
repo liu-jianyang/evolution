@@ -1,14 +1,14 @@
 define(['phaser', 
         'behaviors/behavior', 
-        'behaviors/nodes/move', 
+        'behaviors/nodes/moveto', 
         'config'
-        ], function(Phaser, Behavior, Move, Config) {
+        ], function(Phaser, Behavior, MoveTo, Config) {
     'use strict';
-    var move, self;
+    var moveTo, self;
     function Wander(game) {
         Behavior.call(this, game);
         var dest = randomDest(game);
-        move = new Move(game, dest.x, dest.y);
+        moveTo = new MoveTo(game, dest.x, dest.y);
         self = this;
     }
 
@@ -19,25 +19,25 @@ define(['phaser',
     
     Wander.prototype.start = function() {
         self.parent.start();
-        move.start();
+        moveTo.start();
     }
     
     Wander.prototype.act = function(creature) {
-        if (!move.isRunning()) {
+        if (!moveTo.isRunning()) {
             return;
         }
-        move.act(creature);
-        if (move.isSuccess()) {
+        moveTo.act(creature);
+        if (moveTo.isSuccess()) {
             self.succeed();
             self.reset(); //continuous wander
-        } else if (move.isFailure()) {
+        } else if (moveTo.isFailure()) {
             self.fail();
         }
     }
     
     Wander.prototype.reset = function() {
         var dest = randomDest(self.game);
-        move = new Move(self.game, dest.x, dest.y);
+        moveTo = new MoveTo(self.game, dest.x, dest.y);
         self.start();
     }
     

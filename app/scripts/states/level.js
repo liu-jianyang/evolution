@@ -2,14 +2,10 @@
 
 define(['phaser', 
         'prefabs/sheep', 
-        'config',
-        'behaviors/nodes/move',
-        'behaviors/nodes/wander'
+        'config'
         ], function(Phaser, 
                     Sheep, 
-                    Config,
-                    Move,
-                    Wander) {
+                    Config) {
     var sheep;
     function Level() {}
     

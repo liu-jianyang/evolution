@@ -1,9 +1,9 @@
 define(['phaser', 
         'prefabs/creature', 
-        'behaviors/nodes/move',
+        'behaviors/nodes/moveto',
         'behaviors/nodes/wander', 
         'behaviors/nodes/search', 
-        'config'], function(Phaser, Creature, Move, Wander, Search, Config) {
+        'config'], function(Phaser, Creature, MoveTo, Wander, Search, Config) {
     'use strict';
 
     function Sheep(game, x, y) {

@@ -1,19 +1,19 @@
 define(['phaser', 'behaviors/behavior', 'config'], function(Phaser, Behavior, Config) {
     'use strict';
     var destX, destY, self;
-    function Move(game, x, y) {
+    function MoveTo(game, x, y) {
         Behavior.call(this, game);
         destX = x;
         destY = y;
         self = this;
     }
 
-    Config.inheritPrototype(Move, Behavior);
+    Config.inheritPrototype(MoveTo, Behavior);
 
-    Move.prototype.constructor = Move;
-    Move.prototype.parent = Behavior.prototype;
+    MoveTo.prototype.constructor = MoveTo;
+    MoveTo.prototype.parent = Behavior.prototype;
     
-    Move.prototype.act = function(creature) {
+    MoveTo.prototype.act = function(creature) {
         if (self.isRunning()) {
             if (!creature.isAlive()) {
                 self.fail();
@@ -25,7 +25,7 @@ define(['phaser', 'behaviors/behavior', 'config'], function(Phaser, Behavior, Co
         }
     }
     
-    Move.prototype.reset = function() {
+    MoveTo.prototype.reset = function() {
         self.start();
     }
     
@@ -57,5 +57,5 @@ define(['phaser', 'behaviors/behavior', 'config'], function(Phaser, Behavior, Co
     }
 
 
-    return Move;
+    return MoveTo;
 });

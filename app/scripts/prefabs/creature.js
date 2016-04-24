@@ -1,9 +1,7 @@
 define(['phaser', 
         'config',
         ], function(Phaser, 
-                    Config,
-                    Move,
-                    Wander) {
+                    Config) {
     'use strict';
     
     function Creature(game, x, y, imageRef, deadRef) {
