@@ -30,20 +30,28 @@ define(['phaser', 'config'], function(Phaser, Config) {
         this.state = 'Failure';
     }
 
-     Behavior.prototype.isSuccess = function() {
+    Behavior.prototype.isSuccess = function() {
         return this.state === 'Success';
     }
 
-     Behavior.prototype.isFailure = function() {
+    Behavior.prototype.isFailure = function() {
         return this.state === 'Failure';
     }
 
-     Behavior.prototype.isRunning = function() {
+    Behavior.prototype.isRunning = function() {
         return this.state === 'Running';
     }
 
-     Behavior.prototype.getState = function() {
+    Behavior.prototype.getState = function() {
         return this.state;
+    }
+    
+    Behavior.prototype.setReturnElements = function(params) {
+        this.parameters.values = params;
+    }
+    
+    Behavior.prototype.clearReturnElements = function() {
+        this.parameters = {};
     }
 
     return Behavior;
