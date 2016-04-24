@@ -5,6 +5,7 @@ define(['phaser',
                     Move,
                     Wander) {
     'use strict';
+    
     function Creature(game, x, y, imageRef, deadRef) {
         this.sprite = Phaser.Sprite.call(this, game, x, y, imageRef);
         // this.anchor.setTo(0.5, 0.5);
@@ -133,18 +134,18 @@ define(['phaser',
     }
     
     Creature.prototype.isAlive = function() {
-        return true;
+        return this.alive;
     }
     
     Creature.prototype.die = function() {
         this.damage(this.health);
         this.loadTexture(this.deadRef);
         this.visible = true;
-        this.behavior.succeed();
     }
     
     Creature.prototype.setBehavior = function(behavior) {
         this.behavior = behavior;
+        this.timeoutBehavior = doEveryTimeout(this.behavior.act, 1000, this);
     }
     
     Creature.prototype.update = function() {
@@ -154,7 +155,20 @@ define(['phaser',
                     // hasn't started yet so we start it
                     this.behavior.start();
                 }
-                this.behavior.act(this);
+                this.timeoutBehavior();
+            }
+        };
+        
+    }
+    
+    var doEveryTimeout = function(fction, timeout, params) {
+        var variable;
+        return function() {
+            if (!variable) {
+                fction(params);
+                variable = setTimeout(function() {
+                    variable = undefined;
+                }, timeout);
             }
         }
     }

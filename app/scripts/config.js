@@ -26,6 +26,18 @@ define([], function() {
         var y = this.options.gameSize.y / this.options.tileSize;
         return {x: x, y: y};
     }
+    
+    Config.prototype.doEveryTimeout = function(fction, timeout, params) {
+        var variable;
+        return function() {
+            if (!variable) {
+                fction(params);
+                variable = setTimeout(function() {
+                    variable = undefined;
+                }, timeout);
+            }
+        }
+    }
 
     Config.prototype.setMusicVolume = function(volume) {
         this.options.musicVolume = volume;

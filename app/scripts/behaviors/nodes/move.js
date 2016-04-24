@@ -14,9 +14,9 @@ define(['phaser', 'behaviors/behavior', 'config'], function(Phaser, Behavior, Co
     Move.prototype.parent = Behavior.prototype;
     
     Move.prototype.act = function(creature) {
-        if (this.isRunning()) {
+        if (self.isRunning()) {
             if (!creature.isAlive()) {
-                this.fail();
+                self.fail();
                 return;
             }
             if (!isCreatureAtDestination(creature)) {
@@ -26,7 +26,7 @@ define(['phaser', 'behaviors/behavior', 'config'], function(Phaser, Behavior, Co
     }
     
     Move.prototype.reset = function() {
-        this.start();
+        self.start();
     }
     
     var isCreatureAtDestination = function(creature) {

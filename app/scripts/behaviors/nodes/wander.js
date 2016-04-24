@@ -18,8 +18,7 @@ define(['phaser',
     Wander.prototype.parent = Behavior.prototype;
     
     Wander.prototype.start = function() {
-        console.log('start');
-        this.parent.start();
+        self.parent.start();
         move.start();
     }
     
@@ -29,17 +28,17 @@ define(['phaser',
         }
         move.act(creature);
         if (move.isSuccess()) {
-            this.succeed();
-            this.reset(); //continuous wander
+            self.succeed();
+            self.reset(); //continuous wander
         } else if (move.isFailure()) {
-            this.fail();
+            self.fail();
         }
     }
     
     Wander.prototype.reset = function() {
-        var dest = randomDest(this.game);
-        move = new Move(this.game, dest.x, dest.y);
-        this.start();
+        var dest = randomDest(self.game);
+        move = new Move(self.game, dest.x, dest.y);
+        self.start();
     }
     
     /*
