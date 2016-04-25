@@ -1,7 +1,10 @@
-define(['phaser', 'behaviors/behavior', 'underscore', 'config'], function(Phaser, Behavior, _, Config) {
+/*global _*/
+
+define(['phaser', 'behaviors/behavior', 'config'], function(Phaser, Behavior, Config) {
     'use strict';
     var self, type, element;
     function Search(game, params) {
+        console.log(b3.VERSION);
         //type tile, element grass?
         Behavior.call(this, game);
         type = params.type;

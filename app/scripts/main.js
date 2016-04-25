@@ -20,7 +20,8 @@ require.config({
         phaser: '../bower_components/phaser-official/build/phaser',
         almond: '../bower_components/almond/almond',
         'phaser-official': '../bower_components/phaser-official/build/phaser',
-        underscore: '../../node_modules/underscore/underscore-min'
+        underscore: '../../node_modules/underscore/underscore-min',
+        behavior3js: '../../node_modules/behavior3js/src/b3'
     },
     shim: {
         bootstrapAffix: {
@@ -95,12 +96,16 @@ require.config({
         },
         underscore: {
             exports: '_'
+        },
+        behavior3js: {
+            exports: 'b3'
         }
     }
 });
 
-
-require(['phaser', 'app', 'util'], function(Phaser, App) {
-    var app = new App();
-    app.start();
+require(['underscore', 'behavior3js'], function(_, b3) {
+    require(['phaser', 'app', 'util'], function(Phaser, App) {
+        var app = new App();
+        app.start();
+    });
 });
