@@ -1,8 +1,8 @@
 define(['phaser', 
         'prefabs/creature', 
-        'behaviors/nodes/moveto',
-        'behaviors/nodes/wander', 
-        'behaviors/nodes/search', 
+        'behaviors/leaves/moveto',
+        'behaviors/leaves/wander', 
+        'behaviors/leaves/search', 
         'config'], function(Phaser, Creature, MoveTo, Wander, Search, Config) {
     'use strict';
 

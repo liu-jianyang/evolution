@@ -1,8 +1,11 @@
 define(['phaser', 'config'], function(Phaser, Config) {
     'use strict';
+    var self;
     function Behavior(game) {
         this.game = game;
+        this.state = 'Fresh';
         this.parameters = {};
+        self = this;
     }
 
     Behavior.prototype.constructor = Behavior;
@@ -10,7 +13,7 @@ define(['phaser', 'config'], function(Phaser, Config) {
     Behavior.prototype.start = function() {
         console.log('Starting routine:', this.constructor.name);
         this.state = 'Running';
-    }
+    };
     
     Behavior.prototype.act = function(creature) {
         
@@ -42,6 +45,10 @@ define(['phaser', 'config'], function(Phaser, Config) {
         return this.state === 'Running';
     };
 
+    Behavior.prototype.isFresh = function() {
+        return this.state === 'Fresh';
+    };
+
     Behavior.prototype.getState = function() {
         return this.state;
     };
@@ -53,6 +60,17 @@ define(['phaser', 'config'], function(Phaser, Config) {
     Behavior.prototype.clearReturnElements = function() {
         this.parameters = {};
     };
+    
+    Behavior.prototype.setParent = function(node) {
+        self.parentNode = node;
+    };
+    
+    Behavior.prototype.addChild = function(node) {
+        if (!self.childNodes) {
+            self.childNodes = [];
+        }
+        self.childNodes.push(node);
+    }
 
     return Behavior;
 });
