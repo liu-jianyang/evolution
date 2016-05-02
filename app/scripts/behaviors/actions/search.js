@@ -1,15 +1,17 @@
 /*global _*/
 
-define(['phaser', 'behaviors/nodes/behavior', 'config'], function(Phaser, Behavior, Config) {
+define(['phaser', 'behaviors/nodes/behavior', 'behaviors/behaviortree', 'config'], function(Phaser, Behavior, BehaviorTree, Config) {
     'use strict';
     var self, type, element;
+    this.name = 'Search';
+    BehaviorTree[this.name] = this;
+
     function Search(game, blackboard, params) {
         //type tile, element grass?
         Behavior.call(this, game);
         this.blackboard = blackboard;
         type = params.type;
         element = params.element;
-        this.name = 'Search';
         self = this;
     }
 

@@ -1,10 +1,14 @@
 define(['phaser', 
-        'behaviors/nodes/behavior', 
+        'behaviors/nodes/behavior',
+        'behaviors/behaviortree',
         'behaviors/actions/moveto', 
         'config'
-        ], function(Phaser, Behavior, MoveTo, Config) {
+        ], function(Phaser, Behavior, BehaviorTree, MoveTo, Config) {
     'use strict';
     var moveTo, self;
+    this.name = 'Wander';
+    BehaviorTree[this.name] = this;
+
     function Wander(game, blackboard) {
         Behavior.call(this, game);
         this.blackboard = blackboard;
