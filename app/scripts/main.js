@@ -99,8 +99,9 @@ require.config({
     }
 });
 
-
-require(['phaser', 'app', 'util'], function(Phaser, App) {
-    var app = new App();
-    app.start();
+require(['underscore', 'behavior3js'], function(_, b3) {
+    require(['phaser', 'app', 'util'], function(Phaser, App) {
+        var app = new App();
+        app.start();
+    });
 });
