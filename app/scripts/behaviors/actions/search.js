@@ -1,6 +1,6 @@
 /*global _*/
 
-define(['phaser', 'behaviors/nodes/behavior', 'behaviors/behaviortree', 'config'], function(Phaser, Behavior, BehaviorTree, Config) {
+define(['phaser', 'behaviors/core/behavior', 'behaviors/behaviortree', 'config'], function(Phaser, Behavior, BehaviorTree, Config) {
     'use strict';
     var self, type, element;
     this.name = 'Search';
@@ -43,7 +43,7 @@ define(['phaser', 'behaviors/nodes/behavior', 'behaviors/behaviortree', 'config'
                     }
                 });
                 if (locations.length > 0) {
-                    self.setReturnElements(locations);
+                    self.blackboard.searchLocations = locations;
                     self.succeed();
                 } else {
                     self.fail();

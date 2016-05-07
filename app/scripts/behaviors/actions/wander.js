@@ -1,19 +1,17 @@
 define(['phaser', 
-        'behaviors/nodes/behavior',
-        'behaviors/behaviortree',
+        'behaviors/core/behavior',
         'behaviors/actions/moveto', 
         'config'
-        ], function(Phaser, Behavior, BehaviorTree, MoveTo, Config) {
+        ], function(Phaser, Behavior, MoveTo, Config) {
     'use strict';
     var moveTo, self;
     this.name = 'Wander';
-    BehaviorTree[this.name] = this;
 
     function Wander(game, blackboard) {
         Behavior.call(this, game);
         this.blackboard = blackboard;
         var dest = randomDest(game);
-        moveTo = new MoveTo(game, dest.x, dest.y);
+        moveTo = new MoveTo(game, blackboard, dest.x, dest.y);
         this.name = 'Wander';
         self = this;
     }
@@ -43,7 +41,7 @@ define(['phaser',
     
     Wander.prototype.reset = function() {
         var dest = randomDest(self.game);
-        moveTo = new MoveTo(self.game, dest.x, dest.y);
+        moveTo = new MoveTo(self.game, self.blackboard, dest.x, dest.y);
         self.start();
     };
     

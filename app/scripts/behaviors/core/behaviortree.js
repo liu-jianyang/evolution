@@ -1,12 +1,63 @@
-define(['behaviors/nodes/behavior'], function(Behavior) {
+define(['behaviors/actions/moveto',
+        'behaviors/actions/search',
+        'behaviors/actions/wander',
+        'behaviors/composites/selector',
+        'behaviors/composites/sequence',
+        'behaviors/core/condition'], function(MoveTo, Search, Wander, Selector, Sequence, Condition) {
     'use strict';
-    function BehaviorTree(game, hshOfHashes) {
-        //TODO: Create a tree via hash of hashes
+    var self;
+    /*
+    {
+        root: {
+            name:
+            params:
+        }
+        children: []
+    }
+    */
+    function BehaviorTree(game, data) {
+        var self = this;
+        self.game = game;
+        self.root = returnConstructedBehavior(data.root.name, data.root.params);
+        helper(self.root, data.children);
     }
     
-    console.log('BehaviorTree:', BehaviorTree);
+    function helper(parent, children) {
+        for (var i in children) {
+            var child = returnConstructedBehavior(children[i].name, children[i].params);
+            parent.addChild(child);
+            child.setParent(parent);
+            if (child.children && child.children.length > 0) {
+                helper(child, child.children);
+            }
+        }
+    }
 
     BehaviorTree.prototype.constructor = BehaviorTree;
+    
+    BehaviorTree.prototype.getRoot = function() {
+        return self.root;
+    }
+    
+    function returnConstructedBehavior(name, params) {
+        switch(name) {
+            case 'MoveTo':
+                return new MoveTo(self.game, self.blackboard, params);
+            case 'Search':
+                return new Search(self.game, self.blackboard, params);
+            case 'Wander':
+                return new Wander(self.game, self.blackboard);
+            case 'Selector':
+                return new Selector(self.game, self.blackboard);
+            case 'Sequence':
+                return new Sequence(self.game, self.blackboard);
+            case 'Condition':
+                return new Condition(self.game, self.blackboard, params);
+            default:
+                break;
+            
+        }
+    }
     
     return BehaviorTree;
 })

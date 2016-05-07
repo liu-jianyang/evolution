@@ -1,7 +1,6 @@
-define(['behavior'], function(Behavior) {
+define([], function() {
     'use strict';
-    function Blackboard(game, hshOfHashes) {
-        //TODO: Create a tree via hash of hashes
+    function Blackboard(game) {
     }
 
     Blackboard.prototype.constructor = Blackboard;

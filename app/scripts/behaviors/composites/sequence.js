@@ -1,6 +1,6 @@
 /*global _*/
 
-define(['phaser', 'behaviors/nodes/behavior', 'config'], function(Phaser, Behavior, Config) {
+define(['phaser', 'behaviors/core/behavior', 'config'], function(Phaser, Behavior, Config) {
     'use strict';
     var self;
     function Sequence(game, random) {

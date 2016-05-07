@@ -10,8 +10,13 @@ define(['phaser',
         var imageRef = 'sheep';
         var deadRef = 'deadsheep';
         Creature.call(this, game, x, y, imageRef, deadRef);
-        console.log(b3.VERSION);
-        // this.setBehavior(new Search(this.game, {type: 'tile', element: 'grass'}));
+        var bt = new BehaviorTree(game, {
+            root: {
+                name: 'MoveTo',
+                params: {x: 3, y: 4}
+            }
+        })
+        this.setBehavior(bt.getRoot());
         this.setHunger(80);
         this.setFoodOptions('grass');
     }
