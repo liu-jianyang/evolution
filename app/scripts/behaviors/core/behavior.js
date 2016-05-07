@@ -3,7 +3,6 @@ define(['phaser', 'config'], function(Phaser, Config) {
     var self;
     function Behavior(game) {
         this.game = game;
-        this.state = 'Fresh';
         this.parameters = {};
         self = this;
     }
@@ -45,10 +44,6 @@ define(['phaser', 'config'], function(Phaser, Config) {
         return this.state === 'Running';
     };
 
-    Behavior.prototype.isFresh = function() {
-        return this.state === 'Fresh';
-    };
-
     Behavior.prototype.getState = function() {
         return this.state;
     };
@@ -65,12 +60,20 @@ define(['phaser', 'config'], function(Phaser, Config) {
         self.parentNode = node;
     };
     
+    Behavior.prototype.getParent = function() {
+        return self.parentNode;
+    };
+    
     Behavior.prototype.addChild = function(node) {
         if (!self.childNodes) {
             self.childNodes = [];
         }
         self.childNodes.push(node);
-    }
+    };
+    
+    Behavior.prototype.getChildren = function() {
+        return self.childNodes;
+    };
 
     return Behavior;
 });

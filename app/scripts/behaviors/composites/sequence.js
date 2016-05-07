@@ -18,27 +18,27 @@ define(['phaser', 'behaviors/core/behavior', 'config'], function(Phaser, Behavio
     
     Sequence.prototype.start = function() {
         self.parent.start();
-        self.childNodes[self.index].start();
+        self.getChildren()[self.index].start();
     };
     
     Sequence.prototype.act = function(creature) {
         if (self.isRunning()) {
-            if (!creature.isAlive() || self.childNodes.length === 0) {
+            if (!creature.isAlive() || self.getChildren().length === 0) {
                 self.fail();
                 return;
             }
             
-            var node = self.childNodes[self.index];
+            var node = self.getChildren()[self.index];
             node.act(creature);
             if (node.isFailure()) {
                 self.fail();
             } else if (node.isSuccess()) {
                 self.index++;
                 //no more nodes that can be tried
-                if (self.childNodes.length >= self.index) {
+                if (self.getChildren().length >= self.index) {
                     self.succeed();
                 } else {
-                    self.childNodes[self.index].start();
+                    self.getChildren()[self.index].start();
                 }
             }
         }

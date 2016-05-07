@@ -22,21 +22,22 @@ define(['behaviors/actions/moveto',
     }
     
     function helper(parent, children) {
-        for (var i in children) {
-            var child = returnConstructedBehavior(children[i].name, children[i].params);
+        console.log(parent, children);
+        _.each(children, function(node) {
+            var child = returnConstructedBehavior(node.name, node.params);
             parent.addChild(child);
             child.setParent(parent);
             if (child.children && child.children.length > 0) {
                 helper(child, child.children);
-            }
-        }
+            } 
+        });
     }
 
     BehaviorTree.prototype.constructor = BehaviorTree;
     
     BehaviorTree.prototype.getRoot = function() {
         return self.root;
-    }
+    };
     
     function returnConstructedBehavior(name, params) {
         switch(name) {

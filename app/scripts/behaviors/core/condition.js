@@ -3,9 +3,9 @@
 define(['phaser', 'behaviors/core/behavior', 'config'], function(Phaser, Behavior, Config) {
     'use strict';
     var self;
-    function Condition(game, str) {
+    function Condition(game, blackboard, params) {
         Behavior.call(this, game);
-        this.str = str;
+        this.str = params;
         this.name = 'Condition';
         self = this;
     }

@@ -10,7 +10,7 @@ define(['phaser',
         Behavior.call(this, game);
         this.blackboard = blackboard;
         var dest = randomDest(game);
-        moveTo = new MoveTo(game, blackboard, dest.x, dest.y);
+        moveTo = new MoveTo(game, blackboard, dest);
         this.name = 'Wander';
         self = this;
     }
@@ -40,7 +40,7 @@ define(['phaser',
     
     Wander.prototype.reset = function() {
         var dest = randomDest(self.game);
-        moveTo = new MoveTo(self.game, self.blackboard, dest.x, dest.y);
+        moveTo = new MoveTo(self.game, self.blackboard, dest);
         self.start();
     };
     
