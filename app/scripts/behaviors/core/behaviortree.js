@@ -5,7 +5,7 @@ define(['behaviors/actions/moveto',
         'behaviors/composites/sequence',
         'behaviors/core/condition'], function(MoveTo, Search, Wander, Selector, Sequence, Condition) {
     'use strict';
-    var self;
+    var self = {};
     /*
     {
         root: {
@@ -16,7 +16,6 @@ define(['behaviors/actions/moveto',
     }
     */
     function BehaviorTree(game, data) {
-        var self = this;
         self.game = game;
         self.root = returnConstructedBehavior(data.root.name, data.root.params);
         helper(self.root, data.children);

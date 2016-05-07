@@ -148,7 +148,7 @@ define(['phaser',
     Creature.prototype.update = function() {
         if (this.alive) {
             if (this.behavior) {
-                if (this.behavior.getState() == null) {
+                if (this.behavior.getState() == 'Fresh') {
                     // hasn't started yet so we start it
                     this.behavior.start();
                 }

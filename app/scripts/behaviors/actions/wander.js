@@ -5,7 +5,6 @@ define(['phaser',
         ], function(Phaser, Behavior, MoveTo, Config) {
     'use strict';
     var moveTo, self;
-    this.name = 'Wander';
 
     function Wander(game, blackboard) {
         Behavior.call(this, game);
