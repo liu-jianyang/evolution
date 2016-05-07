@@ -1,10 +1,12 @@
-define(['phaser', 'behaviors/behavior', 'config'], function(Phaser, Behavior, Config) {
+define(['phaser', 'behaviors/core/behavior', 'config'], function(Phaser, Behavior, Config) {
     'use strict';
     var destX, destY, self;
-    function MoveTo(game, x, y) {
+
+    function MoveTo(game, blackboard, params) {
         Behavior.call(this, game);
-        destX = x;
-        destY = y;
+        this.blackboard = blackboard;
+        destX = params.x;
+        destY = params.y;
         self = this;
     }
 

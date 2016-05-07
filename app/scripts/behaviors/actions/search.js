@@ -1,9 +1,13 @@
-define(['phaser', 'behaviors/behavior', 'underscore', 'config'], function(Phaser, Behavior, _, Config) {
+/*global _*/
+
+define(['phaser', 'behaviors/core/behavior', 'behaviors/core/behaviortree', 'config'], function(Phaser, Behavior, BehaviorTree, Config) {
     'use strict';
     var self, type, element;
-    function Search(game, params) {
+
+    function Search(game, blackboard, params) {
         //type tile, element grass?
         Behavior.call(this, game);
+        this.blackboard = blackboard;
         type = params.type;
         element = params.element;
         self = this;
@@ -37,7 +41,7 @@ define(['phaser', 'behaviors/behavior', 'underscore', 'config'], function(Phaser
                     }
                 });
                 if (locations.length > 0) {
-                    self.setReturnElements(locations);
+                    self.blackboard.searchLocations = locations;
                     self.succeed();
                 } else {
                     self.fail();
