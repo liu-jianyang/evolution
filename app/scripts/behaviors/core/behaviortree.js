@@ -22,7 +22,6 @@ define(['behaviors/actions/moveto',
     }
     
     function helper(parent, children) {
-        console.log(parent, children);
         _.each(children, function(node) {
             var child = returnConstructedBehavior(node.name, node.params);
             parent.addChild(child);

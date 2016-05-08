@@ -1,9 +1,7 @@
 define(['phaser', 
-        'prefabs/creature', 
-        'behaviors/actions/moveto',
-        'behaviors/actions/wander', 
+        'prefabs/creature',
         'behaviors/core/behaviortree', 
-        'config'], function(Phaser, Creature, MoveTo, Wander, BehaviorTree, Config) {
+        'config'], function(Phaser, Creature, BehaviorTree, Config) {
     'use strict';
 
     function Sheep(game, x, y) {
@@ -12,9 +10,13 @@ define(['phaser',
         Creature.call(this, game, x, y, imageRef, deadRef);
         var bt = new BehaviorTree(game, {
             root: {
-                name: 'Selector'
+                name: 'Sequence'
             },
             children: [
+                {
+                    name: 'MoveTo',
+                    params: {x: 6, y: 5}
+                },
                 {
                     name: 'MoveTo',
                     params: {x: 3, y: 4}

@@ -134,6 +134,14 @@ define(['phaser',
         return this.alive;
     };
     
+    Creature.prototype.canMove = function() {
+        return true; //TODO
+    }
+    
+    Creature.prototype.canSearch = function() {
+        return true; //TODO
+    }
+    
     Creature.prototype.die = function() {
         this.damage(this.health);
         this.loadTexture(this.deadRef);
@@ -142,18 +150,18 @@ define(['phaser',
     
     Creature.prototype.setBehavior = function(behavior) {
         this.behavior = behavior;
-        this.timeoutBehavior = Config.doEveryTimeout(this.behavior.act, 500, this);
+        //TODO: Timeout not working anymore for some reason
+        this.timeoutBehavior = Config.doEveryTimeout(this.behavior.rand, 500, this);
     };
     
     Creature.prototype.update = function() {
-        if (this.alive) {
-            if (this.behavior) {
-                if (this.behavior.getState() == null) {
-                    // hasn't started yet so we start it
-                    this.behavior.start();
-                }
-                this.timeoutBehavior();
+        if (this.behavior) {
+            if (this.behavior.getState() == null) {
+                // hasn't started yet so we start it
+                this.behavior.start();
+                // this.behavior.act();
             }
+            this.behavior.act(this);
         }
     };
     

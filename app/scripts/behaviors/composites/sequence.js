@@ -2,51 +2,46 @@
 
 define(['phaser', 'behaviors/core/behavior', 'config'], function(Phaser, Behavior, Config) {
     'use strict';
-    var self;
+
     function Sequence(game, random) {
         Behavior.call(this, game);
         this.random = random;
         this.index = 0;
         this.name = 'Sequence';
-        self = this;
     }
 
     Config.inheritPrototype(Sequence, Behavior);
 
     Sequence.prototype.constructor = Sequence;
     Sequence.prototype.parent = Behavior.prototype;
-    
-    Sequence.prototype.start = function() {
-        self.parent.start();
-        self.getChildren()[self.index].start();
-    };
-    
+
     Sequence.prototype.act = function(creature) {
-        if (self.isRunning()) {
-            if (!creature.isAlive() || self.getChildren().length === 0) {
-                self.fail();
+        if (this.isRunning()) {
+            if (this.getChildren().length === 0) {
+                this.fail();
+                return;
+            }
+            if (this.index >= this.getChildren().length) {
+                this.succeed();
                 return;
             }
             
-            var node = self.getChildren()[self.index];
+            var node = this.getChildren()[this.index];
+            if (!node.getState()) {
+                node.start();
+            }
             node.act(creature);
             if (node.isFailure()) {
-                self.fail();
+                this.fail();
             } else if (node.isSuccess()) {
-                self.index++;
-                //no more nodes that can be tried
-                if (self.getChildren().length >= self.index) {
-                    self.succeed();
-                } else {
-                    self.getChildren()[self.index].start();
-                }
+                this.index++;
             }
         }
     };
     
     Sequence.prototype.reset = function() {
-        self.index = 0;
-        self.start();
+        this.index = 0;
+        this.start();
     };
 
     return Sequence;

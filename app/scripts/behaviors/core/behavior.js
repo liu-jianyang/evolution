@@ -13,14 +13,6 @@ define(['phaser', 'config'], function(Phaser, Config) {
         console.log('Starting routine:', this.constructor.name);
         this.state = 'Running';
     };
-    
-    Behavior.prototype.act = function(creature) {
-        
-    };
-    
-    Behavior.prototype.reset = function() {
-        
-    };
 
     Behavior.prototype.succeed = function() {
         console.log('Routine %s succeeded', this.constructor.name);
@@ -57,22 +49,22 @@ define(['phaser', 'config'], function(Phaser, Config) {
     };
     
     Behavior.prototype.setParent = function(node) {
-        self.parentNode = node;
+        this.parentNode = node;
     };
     
     Behavior.prototype.getParent = function() {
-        return self.parentNode;
+        return this.parentNode;
     };
     
     Behavior.prototype.addChild = function(node) {
-        if (!self.childNodes) {
-            self.childNodes = [];
+        if (!this.childNodes) {
+            this.childNodes = [];
         }
-        self.childNodes.push(node);
+        this.childNodes.push(node);
     };
     
     Behavior.prototype.getChildren = function() {
-        return self.childNodes;
+        return this.childNodes;
     };
 
     return Behavior;

@@ -20,10 +20,10 @@ define(['phaser', 'behaviors/core/behavior', 'behaviors/core/behaviortree', 'con
     
     Search.prototype.act = function(creature) {
         if (self.isRunning()) {
-            if (!creature.isAlive()) {
-                self.fail();
-                return;
-            }
+            // if (!creature.canSearch()) {
+            //     self.fail();
+            //     return;
+            // }
             if (type === 'tile') {
                 var map = self.game.map;
                 //search through map for element

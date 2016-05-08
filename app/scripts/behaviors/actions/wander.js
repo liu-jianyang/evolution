@@ -4,44 +4,39 @@ define(['phaser',
         'config'
         ], function(Phaser, Behavior, MoveTo, Config) {
     'use strict';
-    var moveTo, self;
 
     function Wander(game, blackboard) {
         Behavior.call(this, game);
         this.blackboard = blackboard;
         var dest = randomDest(game);
-        moveTo = new MoveTo(game, blackboard, dest);
+        this.moveTo = new MoveTo(game, blackboard, dest);
         this.name = 'Wander';
-        self = this;
     }
 
     Config.inheritPrototype(Wander, Behavior);
 
     Wander.prototype.constructor = Wander;
     Wander.prototype.parent = Behavior.prototype;
-    
-    Wander.prototype.start = function() {
-        self.parent.start();
-        moveTo.start();
-    };
-    
+
     Wander.prototype.act = function(creature) {
-        if (!moveTo.isRunning()) {
+        if (!this.isRunning()) {
             return;
         }
-        moveTo.act(creature);
-        if (moveTo.isSuccess()) {
-            self.succeed();
-            self.reset(); //continuous wander
-        } else if (moveTo.isFailure()) {
-            self.fail();
+        if (!this.moveTo.getState()) {
+            this.moveTo.start();
+        }
+        this.moveTo.act(creature);
+        if (this.moveTo.isSuccess()) {
+            this.succeed();
+        } else if (this.moveTo.isFailure()) {
+            this.fail();
         }
     };
     
     Wander.prototype.reset = function() {
-        var dest = randomDest(self.game);
-        moveTo = new MoveTo(self.game, self.blackboard, dest);
-        self.start();
+        var dest = randomDest(this.game);
+        this.moveTo = new MoveTo(this.game, this.blackboard, dest);
+        this.start();
     };
     
     /*

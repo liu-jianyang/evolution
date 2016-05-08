@@ -31,6 +31,7 @@ define([], function() {
         var variable;
         return function() {
             if (!variable) {
+                console.log('running function');
                 fction(params);
                 variable = setTimeout(function() {
                     variable = undefined;

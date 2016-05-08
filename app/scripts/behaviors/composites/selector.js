@@ -22,24 +22,27 @@ define(['phaser', 'behaviors/core/behavior', 'config'], function(Phaser, Behavio
     };
     
     Selector.prototype.act = function(creature) {
+        console.log('selector act', _.map(self.getChildren(), function(item) {return item.getState()}));
         if (self.isRunning()) {
-            if (!creature.isAlive() || self.getChildren().length === 0) {
+            if (self.getChildren().length === 0) {
                 self.fail();
                 return;
             }
             
             var node = self.getChildren()[self.index];
+            console.log('node:', node);
             node.act(creature);
             if (node.isSuccess()) {
                 self.succeed();
-            } else if (node.isFailure()) {
-                self.index++;
-                //no more nodes that can be tried
-                if (self.getChildren().length >= self.index) {
-                    self.fail();
-                } else {
-                    self.getChildren()[self.index].start();
-                }
+        //     } else if (node.isFailure()) {
+        //         console.log('failure');
+        //         self.index++;
+        //         //no more nodes that can be tried
+        //         if (self.getChildren().length >= self.index) {
+        //             self.fail();
+        //         } else {
+        //             self.getChildren()[self.index].start();
+        //         }
             }
         }
     };
