@@ -5,7 +5,6 @@ define(['behaviors/actions/moveto',
         'behaviors/composites/sequence',
         'behaviors/core/condition'], function(MoveTo, Search, Wander, Selector, Sequence, Condition) {
     'use strict';
-    var self = {};
     /*
     {
         root: {
@@ -16,9 +15,9 @@ define(['behaviors/actions/moveto',
     }
     */
     function BehaviorTree(game, data) {
-        self.game = game;
-        self.root = returnConstructedBehavior(data.root.name, data.root.params);
-        helper(self.root, data.children);
+        this.game = game;
+        this.root = returnConstructedBehavior(data.root.name, data.root.params);
+        helper(this.root, data.children);
     }
     
     function helper(parent, children) {
@@ -35,23 +34,23 @@ define(['behaviors/actions/moveto',
     BehaviorTree.prototype.constructor = BehaviorTree;
     
     BehaviorTree.prototype.getRoot = function() {
-        return self.root;
+        return this.root;
     };
     
-    function returnConstructedBehavior(name, params) {
+    function returnConstructedBehavior(name, params, game, blackboard) {
         switch(name) {
             case 'MoveTo':
-                return new MoveTo(self.game, self.blackboard, params);
+                return new MoveTo(game, blackboard, params);
             case 'Search':
-                return new Search(self.game, self.blackboard, params);
+                return new Search(game, blackboard, params);
             case 'Wander':
-                return new Wander(self.game, self.blackboard);
+                return new Wander(game, blackboard);
             case 'Selector':
-                return new Selector(self.game, self.blackboard);
+                return new Selector(game, blackboard);
             case 'Sequence':
-                return new Sequence(self.game, self.blackboard);
+                return new Sequence(game, blackboard);
             case 'Condition':
-                return new Condition(self.game, self.blackboard, params);
+                return new Condition(game, blackboard, params);
             default:
                 break;
             

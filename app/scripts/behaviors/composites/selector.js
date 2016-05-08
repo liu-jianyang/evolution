@@ -15,35 +15,30 @@ define(['phaser', 'behaviors/core/behavior', 'config'], function(Phaser, Behavio
 
     Selector.prototype.constructor = Selector;
     Selector.prototype.parent = Behavior.prototype;
-    
-    Selector.prototype.start = function() {
-        self.parent.start();
-        self.getChildren()[self.index].start();
-    };
-    
+
     Selector.prototype.act = function(creature) {
-        console.log('selector act', _.map(self.getChildren(), function(item) {return item.getState()}));
-        if (self.isRunning()) {
-            if (self.getChildren().length === 0) {
-                self.fail();
-                return;
-            }
-            
-            var node = self.getChildren()[self.index];
-            console.log('node:', node);
-            node.act(creature);
-            if (node.isSuccess()) {
-                self.succeed();
-        //     } else if (node.isFailure()) {
-        //         console.log('failure');
-        //         self.index++;
-        //         //no more nodes that can be tried
-        //         if (self.getChildren().length >= self.index) {
-        //             self.fail();
-        //         } else {
-        //             self.getChildren()[self.index].start();
-        //         }
-            }
+        if (!this.isRunning()) {
+            return;
+        }
+        if (this.getChildren().length === 0) {
+            this.fail();
+            return;
+        }
+        if (this.index >= this.getChildren().length) {
+            this.fail();
+            return;
+        }
+        
+        var node = this.getChildren()[this.index];
+        if (!node.getState()) {
+            node.start();
+        }
+        node.act(creature);
+        if (node.isSuccess()) {
+            this.succeed();
+            return;
+        } else if (node.isFailure()) {
+            this.index++;
         }
     };
     
