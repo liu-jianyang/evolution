@@ -22,31 +22,31 @@ define(['phaser',
     Creature.DEFAULT_HUNGER_RATE = -1;
     
     Creature.prototype.setHunger = function(hunger) {
-        Creature.HUNGER = hunger;
+        this.hunger = hunger;
     };
     
     Creature.prototype.getHunger = function() {
-        return Creature.HUNGER;
+        return this.hunger;
     };
     
     Creature.prototype.changeHunger = function(num) {
-        Creature.HUNGER += num;
+        this.hunger += num;
     };
 
     Creature.prototype.setHungerRate = function(rate) {
-        Creature.HUNGER_RATE = rate;
+        this.hungerRate = rate;
     };
     
     Creature.prototype.getHungerRate = function() {
-        return Creature.HUNGER_RATE || Creature.DEFAULT_HUNGER_RATE;
+        return this.hungerRate || Creature.DEFAULT_HUNGER_RATE;
     };
     
     Creature.prototype.setSpeed = function(rate) {
-        Creature.SPEED = rate;
+        this.speed = rate;
     };
     
     Creature.prototype.getSpeed = function() {
-        return Creature.SPEED || Creature.DEFAULT_SPEED;
+        return this.speed || Creature.DEFAULT_SPEED;
     };
 
     Creature.prototype.setX = function(position) {
@@ -66,17 +66,17 @@ define(['phaser',
     };
     
     Creature.prototype.getFoodOptions = function() {
-        return Creature.FOOD_TYPES;
+        return this.foodTypes;
     };
     
     Creature.prototype.setFoodOptions = function(food) {
-        if (!Creature.FOOD_TYPES) {
-            Creature.FOOD_TYPES = [];
+        if (!this.foodTypes) {
+            this.foodTypes = [];
         }
         if (typeof(food) === 'string') {
-            Creature.FOOD_TYPES.push(food);
+            this.foodTypes.push(food);
         } else {
-            Creature.FOOD_TYPES.concat(food);
+            this.foodTypes.concat(food);
         }
     };
     
