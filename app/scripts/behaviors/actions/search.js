@@ -6,6 +6,7 @@ define(['phaser', 'behaviors/core/behavior', 'behaviors/core/behaviortree', 'con
     function Search(game, blackboard, params) {
         //type tile, element grass?
         Behavior.call(this, game);
+        this.game = game;
         this.blackboard = blackboard || {};
         this.type = params.type;
         this.element = params.element;
@@ -17,6 +18,7 @@ define(['phaser', 'behaviors/core/behavior', 'behaviors/core/behaviortree', 'con
     Search.prototype.parent = Behavior.prototype;
     
     Search.prototype.act = function(creature) {
+        console.log('this:', this);
         if (!this.isRunning()) {
             return;
         }

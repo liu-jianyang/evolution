@@ -16,13 +16,14 @@ define(['behaviors/actions/moveto',
     */
     function BehaviorTree(game, data) {
         this.game = game;
-        this.root = returnConstructedBehavior(data.root.name, data.root.params);
-        helper(this.root, data.children);
+        this.blackboard = {};
+        this.root = returnConstructedBehavior(data.root.name, data.root.params, this.game, this.blackboard);
+        helper(this.root, data.children, this.game, this.blackboard);
     }
     
-    function helper(parent, children) {
+    function helper(parent, children, game, blackboard) {
         _.each(children, function(node) {
-            var child = returnConstructedBehavior(node.name, node.params);
+            var child = returnConstructedBehavior(node.name, node.params, game, blackboard);
             parent.addChild(child);
             child.setParent(parent);
             if (child.children && child.children.length > 0) {

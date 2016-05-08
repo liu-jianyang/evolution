@@ -10,19 +10,18 @@ define(['phaser',
         Creature.call(this, game, x, y, imageRef, deadRef);
         var bt = new BehaviorTree(game, {
             root: {
-                name: 'Search',
-                params: {type: 'tile', element: 'grass'}
-            }
-            // children: [
-            //     {
-            //         name: 'MoveTo',
-            //         params: {x: 6, y: 5}
-            //     },
-            //     {
-            //         name: 'MoveTo',
-            //         params: {x: 3, y: 4}
-            //     }
-            // ]
+                name: 'Selector'
+            },
+            children: [
+                {
+                    name: 'Search',
+                    params: {type: 'tile', element: 'clay'}
+                },
+                {
+                    name: 'MoveTo',
+                    params: {x: 3, y: 4}
+                }
+            ]
         })
         this.setBehavior(bt.getRoot());
         this.setHunger(80);
