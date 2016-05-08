@@ -23,7 +23,7 @@ define(['phaser',
             //create layer
             this.backgroundLayer = this.game.map.createLayer('background');
             this.backgroundLayer.resizeWorld();
-            sheep = new Sheep(this.game, 5*Config.options.tileSize, 7*Config.options.tileSize, this.game.map);
+            sheep = new Sheep(this.game, 5, 7, this.game.map);
             this.game.add.existing(sheep);
             
             this.game.map.putTile(this.grassHsh.halfMature, 3, 4);

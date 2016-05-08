@@ -7,9 +7,8 @@ define(['phaser', 'behaviors/core/behavior', 'behaviors/core/behaviortree', 'con
         //type tile, element grass?
         Behavior.call(this, game);
         this.game = game;
-        this.blackboard = blackboard || {};
-        this.type = params.type;
-        this.element = params.element;
+        this.blackboard = blackboard;
+        this.params = params;
     }
 
     Config.inheritPrototype(Search, Behavior);
@@ -18,7 +17,6 @@ define(['phaser', 'behaviors/core/behavior', 'behaviors/core/behaviortree', 'con
     Search.prototype.parent = Behavior.prototype;
     
     Search.prototype.act = function(creature) {
-        console.log('this:', this);
         if (!this.isRunning()) {
             return;
         }
@@ -26,31 +24,46 @@ define(['phaser', 'behaviors/core/behavior', 'behaviors/core/behaviortree', 'con
         //     this.fail();
         //     return;
         // }
-        if (this.type === 'tile') {
-            var map = this.game.map;
-            var element = this.element;
-            //search through map for element
-            //map reduce
-            var locations = _.filter(_.values(map.tiles), function(tileArr){
-                var x = tileArr[0] / Config.options.tileSize;
-                var y = tileArr[1] / Config.options.tileSize;
-                var size = Config.getRelativeGameSize();
-                //no point in checking if tile location is somewhere no one sees
-                if (x < size.x && y < size.y) {
-                    var tile = map.getTile(x, y);
-                    if (tile.properties.type === element) {
-                        return tileArr;
+        var blackboard = this.blackboard;
+        var searchOptions = blackboard.get('searchOptions');
+        if (!searchOptions || searchOptions.length === 0) {
+            this.fail();
+            return;
+        }
+        var id = this.params;
+        blackboard.set(id, []);
+        var map = this.game.map;
+        var type, element, locations = [];
+        _.each(searchOptions, function(option) {
+            type = option.type;
+            if (type === 'tile') {
+                element = option.element;
+                //search through map for element
+                //map reduce
+                locations = locations.concat(_.filter(_.values(map.tiles), function(tileArr){
+                    var x = tileArr[0] / Config.options.tileSize;
+                    var y = tileArr[1] / Config.options.tileSize;
+                    var size = Config.getRelativeGameSize();
+                    //no point in checking if tile location is somewhere no one sees
+                    if (x < size.x && y < size.y) {
+                        return map.getTile(x, y).properties.type === element;
                     }
-                }
-            });
-            if (locations.length > 0) {
-                this.blackboard.searchLocations = locations;
-                this.succeed();
+                }));
             } else {
                 this.fail();
+                throw new Error ('Nothing else has been defined yet'); //TODO
             }
+        });
+        
+        if (locations.length > 0) {
+            //convert to relative
+            var arr = _.map(locations, function(loc) {
+                return {x: loc[0] / Config.options.tileSize, y: loc[1] / Config.options.tileSize};
+            });
+            blackboard.set(id, arr);
+            this.succeed();
         } else {
-            throw new Error ('Nothing else has been defined yet'); //TODO
+            this.fail();
         }
     };
     

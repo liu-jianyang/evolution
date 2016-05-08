@@ -1,10 +1,13 @@
+/*global _*/
+
 define(['behaviors/actions/moveto',
         'behaviors/actions/search',
         'behaviors/actions/wander',
         'behaviors/actions/eat',
         'behaviors/composites/selector',
         'behaviors/composites/sequence',
-        'behaviors/conditions/ishungry'], function(MoveTo, Search, Wander, Eat, Selector, Sequence, IsHungry) {
+        'behaviors/conditions/ishungry',
+        'behaviors/core/blackboard'], function(MoveTo, Search, Wander, Eat, Selector, Sequence, IsHungry, Blackboard) {
     'use strict';
     /*
     {
@@ -15,9 +18,9 @@ define(['behaviors/actions/moveto',
         children: []
     }
     */
-    function BehaviorTree(game, data) {
+    function BehaviorTree(game, data, blackboardData) {
         this.game = game;
-        this.blackboard = {};
+        this.blackboard = setBlackboard(blackboardData);
         this.root = returnConstructedBehavior(data.root.name, data.root.params, this.game, this.blackboard);
         helper(this.root, data.children, this.game, this.blackboard);
     }
@@ -31,6 +34,14 @@ define(['behaviors/actions/moveto',
                 helper(child, child.children);
             } 
         });
+    }
+    
+    function setBlackboard(data) {
+        var blackboard = new Blackboard();
+        _.each(data, function(v, k) {
+            blackboard.set(k, v);
+        });
+        return blackboard;
     }
 
     BehaviorTree.prototype.constructor = BehaviorTree;

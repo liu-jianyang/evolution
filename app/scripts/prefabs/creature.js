@@ -5,7 +5,9 @@ define(['phaser',
     'use strict';
     
     function Creature(game, x, y, imageRef, deadRef) {
-        this.sprite = Phaser.Sprite.call(this, game, x, y, imageRef);
+        var trueX = x * Config.options.tileSize;
+        var trueY = y * Config.options.tileSize;
+        this.sprite = Phaser.Sprite.call(this, game, trueX, trueY, imageRef);
         // this.anchor.setTo(0.5, 0.5);
         this.deadRef = deadRef;
         this.notifyHunger = [false, false, false];

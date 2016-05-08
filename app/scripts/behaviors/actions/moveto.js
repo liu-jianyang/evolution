@@ -5,7 +5,7 @@ define(['phaser', 'behaviors/core/behavior', 'config'], function(Phaser, Behavio
         this.params = params;
         Behavior.call(this, game);
         this.blackboard = blackboard;
-        this.dest = params;
+        this.params = params;
     }
 
     Config.inheritPrototype(MoveTo, Behavior);
@@ -14,16 +14,23 @@ define(['phaser', 'behaviors/core/behavior', 'config'], function(Phaser, Behavio
     MoveTo.prototype.parent = Behavior.prototype;
     
     MoveTo.prototype.act = function(creature) {
-        if (this.isRunning()) {
-            // if (!creature.canMove()) {
-            //     this.fail();
-            //     return;
-            // }
-            if (!isCreatureAtDestination(creature, this.dest)) {
-                moveCreature(creature, this.dest);
-            } else {
-                this.succeed();
-            }
+        if (!this.isRunning()) {
+            return;
+        }
+        // if (!creature.canMove()) {
+        //     this.fail();
+        //     return;
+        // }
+        var moveLocation;
+        if (typeof(this.params) === 'string') {
+            moveLocation = this.blackboard.get(this.params)[0];
+        } else {
+            moveLocation = this.params;
+        }
+        if (!isCreatureAtDestination(creature, moveLocation)) {
+            moveCreature(creature, moveLocation);
+        } else {
+            this.succeed();
         }
     };
     

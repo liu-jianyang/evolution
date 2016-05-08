@@ -4,7 +4,8 @@ define(['phaser', 'behaviors/core/behavior', 'config'], function(Phaser, Behavio
     'use strict';
     function IsHungry(game, blackboard, params) {
         Behavior.call(this, game);
-        this.minHungerLevel = params.minHungerLevel;
+        this.blackboard = blackboard;
+        this.params = params;
         this.name = 'IsHungry';
     }
 
@@ -17,7 +18,12 @@ define(['phaser', 'behaviors/core/behavior', 'config'], function(Phaser, Behavio
         if (!this.isRunning()) {
             return;
         }
-        if (creature.getHunger() <= this.minHungerLevel) {
+        var minHungerLevel = this.blackboard ? this.blackboard.get('minHungerLevel') : this.params.minHungerLevel;
+        if (!minHungerLevel) {
+            this.fail();
+            return;
+        }
+        if (creature.getHunger() <= minHungerLevel) {
             this.succeed();
         } else {
             this.fail();
