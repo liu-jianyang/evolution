@@ -1,9 +1,10 @@
 define(['behaviors/actions/moveto',
         'behaviors/actions/search',
         'behaviors/actions/wander',
+        'behaviors/actions/eat',
         'behaviors/composites/selector',
         'behaviors/composites/sequence',
-        'behaviors/core/condition'], function(MoveTo, Search, Wander, Selector, Sequence, Condition) {
+        'behaviors/conditions/ishungry'], function(MoveTo, Search, Wander, Eat, Selector, Sequence, IsHungry) {
     'use strict';
     /*
     {
@@ -50,8 +51,10 @@ define(['behaviors/actions/moveto',
                 return new Selector(game, blackboard);
             case 'Sequence':
                 return new Sequence(game, blackboard);
-            case 'Condition':
-                return new Condition(game, blackboard, params);
+            case 'IsHungry':
+                return new IsHungry(game, blackboard, params);
+            case 'Eat':
+                return new Eat(game, blackboard);
             default:
                 break;
             

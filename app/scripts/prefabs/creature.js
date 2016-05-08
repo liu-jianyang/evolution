@@ -28,7 +28,7 @@ define(['phaser',
     Creature.prototype.getHunger = function() {
         return this.hunger;
     };
-    
+
     Creature.prototype.changeHunger = function(num) {
         this.hunger += num;
     };
@@ -116,10 +116,10 @@ define(['phaser',
             } else if (this.getHunger() < 10 && !this.notifyHunger[2]) {
                 console.log('Starving to death');
                 this.notifyHunger[2] = true;
-            } else if (this.getHunger() < 20 && !this.notifyHunger[1]) {
+            } else if (this.getHunger() < (this.minHungerLevel / 2) && !this.notifyHunger[1]) {
                 console.log('Near starving');
                 this.notifyHunger[1] = true;
-            } else if (this.getHunger() < 50 && !this.notifyHunger[0]) {
+            } else if (this.getHunger() < this.minHungerLevel && !this.notifyHunger[0]) {
                 console.log('Getting hungry...');
                 this.notifyHunger[0] = true;
             }

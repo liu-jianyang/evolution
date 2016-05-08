@@ -8,24 +8,29 @@ define(['phaser',
         var imageRef = 'sheep';
         var deadRef = 'deadsheep';
         Creature.call(this, game, x, y, imageRef, deadRef);
+        this.game = game;
+        this.setHunger(80);
+        this.minHungerLevel = 90;
+        this.setFoodOptions('grass');
         var bt = new BehaviorTree(game, {
             root: {
-                name: 'Selector'
+                name: 'Sequence'
             },
             children: [
                 {
-                    name: 'Search',
-                    params: {type: 'tile', element: 'clay'}
+                    name: 'IsHungry',
+                    params: {minHungerLevel: this.minHungerLevel}
                 },
                 {
                     name: 'MoveTo',
                     params: {x: 3, y: 4}
+                },
+                {
+                    name: 'Eat'
                 }
             ]
         })
         this.setBehavior(bt.getRoot());
-        this.setHunger(80);
-        this.setFoodOptions('grass');
     }
 
     Config.inheritPrototype(Sheep, Creature);
@@ -39,13 +44,15 @@ define(['phaser',
     
     Sheep.prototype.eat = function() {
         //if hungry and can eat tile or whatever's on tile, eat
-        if (this.getHunger() < 50) {
-            var tile = this.map.getTile(this.getX(), this.getY());
+        if (this.getHunger() < this.minHungerLevel) {
+            var tile = this.game.map.getTile(this.getX(), this.getY());
+            console.log(this.getFoodOptions(), this.getFoodOptions().indexOf(tile.properties.type));
             if (tile && tile.properties && tile.properties.type && this.getFoodOptions().indexOf(tile.properties.type) !== -1) {
                 this.changeHunger(20);
-                console.log('Eat food');
+                return true;
             }
         }
+        return false;
     };
     
     return Sheep;
