@@ -4,52 +4,42 @@ define(['phaser',
         'config'], function(Phaser, Creature, BehaviorTree, Config) {
     'use strict';
 
-    function Sheep(game, x, y) {
-        var imageRef = 'sheep';
-        var deadRef = 'deadsheep';
+    function Hydra(game, x, y, map) {
+        this.index = 1;
+        var imageRef = 'hydra' + this.index;
+        var deadRef = 'deadhydra' + this.index;
         Creature.call(this, game, x, y, imageRef, deadRef);
         this.game = game;
+        this.map = map;
         this.setHunger(80);
         this.minHungerLevel = 90;
         this.foodOptions = [{type: 'tile', element: 'grass'}];
         var bbData = {
-            minHungerLevel: this.minHungerLevel,
-            searchOptions: this.foodOptions
+            minHungerLevel: this.minHungerLevel
         }
         var bt = new BehaviorTree(game, {
             root: {
-                name: 'Sequence'
+                name: 'Repeat'
             },
             children: [
                 {
-                    name: 'IsHungry'
-                },
-                {
-                    name: 'Search',
-                    params: 'searchLocations'
-                },
-                {
-                    name: 'MoveTo',
-                    params: 'searchLocations'
-                },
-                {
-                    name: 'Eat'
+                    name: 'Wander'
                 }
             ]
         }, bbData)
         this.setBehavior(bt.getRoot());
     }
 
-    Config.inheritPrototype(Sheep, Creature);
+    Config.inheritPrototype(Hydra, Creature);
 
-    Sheep.prototype.constructor = Sheep;
-    Sheep.prototype.parent = Sheep.prototype;
+    Hydra.prototype.constructor = Hydra;
+    Hydra.prototype.parent = Hydra.prototype;
     
-    Sheep.prototype.playAnimation = function(direction) {
+    Hydra.prototype.playAnimation = function(direction) {
         // this.animations.play(direction);
     };
     
-    Sheep.prototype.eat = function() {
+    Hydra.prototype.eat = function() {
         //if hungry and can eat tile or whatever's on tile, eat
         if (this.getHunger() < this.minHungerLevel) {
             var tile = this.game.map.getTile(this.getX(), this.getY());
@@ -71,5 +61,5 @@ define(['phaser',
         return tile && tile.properties && tile.properties.type;
     }
     
-    return Sheep;
+    return Hydra;
 });

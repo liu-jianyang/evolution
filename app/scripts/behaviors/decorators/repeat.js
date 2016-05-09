@@ -2,52 +2,52 @@
 
 define(['phaser', 'behaviors/core/behavior', 'config'], function(Phaser, Behavior, Config) {
     'use strict';
-    var self;
-    function Repeat(game, behavior, numOfTimes) {
+    function Repeat(game, blackboard, numOfTimes) {
         Behavior.call(this, game);
+        this.game = game;
+        this.blackboard = blackboard;
         this.numOfTimes = numOfTimes ? numOfTimes : -1; //will never reach -1?
         this.numRepeated = 0;
-        this.behavior = behavior;
         this.name = 'Repeat';
-        self = this;
     }
 
     Config.inheritPrototype(Repeat, Behavior);
 
     Repeat.prototype.constructor = Repeat;
     Repeat.prototype.parent = Behavior.prototype;
-    Repeat.prototype.start = function() {
-        if (self.numOfTimes > 0) {
-            self.parent.start();
-            self.behavior.start();
-            self.numRepeated++;
-        }
-    };
-    
     
     Repeat.prototype.act = function(creature) {
-        if (self.isRunning()) {
-            if (!creature.isAlive()) {
-                self.fail();
+        if (!this.isRunning()) {
+            return;
+        }
+        if (this.getChildren().length === 0 || this.getChildren().length > 1) {
+            this.fail();
+            return;
+        }
+        if (this.numOfTimes === 0) {
+            this.succeed();
+            return;
+        }
+        
+        var node = this.getChildren()[0];
+        if (!node.getState()) {
+            node.start();
+        }
+        node.act(creature);
+        if (node.isSuccess() || node.isFailure()) {
+            this.numRepeated++;
+            if (this.numOfTimes === this.numRepeated) {
+                this.succeed();
                 return;
-            }
-            
-            self.behavior.act();
-            
-            if (!self.behavior.isRunning()) {
-                if (self.numOfTimes === self.numRepeated) {
-                    self.succeed();
-                    return;
-                }
-                self.behavior.start();
-                self.numRepeated++;
+            } else {
+                node.reset();
             }
         }
     };
     
     Repeat.prototype.reset = function() {
-        self.numRepeated = 0;
-        self.start();
+        this.numRepeated = 0;
+        this.start();
     };
 
     return Repeat;
