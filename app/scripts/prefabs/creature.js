@@ -161,7 +161,6 @@ define(['phaser',
             if (this.behavior.getState() == null) {
                 // hasn't started yet so we start it
                 this.behavior.start();
-                // this.behavior.act();
             }
             this.behavior.act(this);
         }

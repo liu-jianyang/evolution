@@ -11,7 +11,8 @@ define(['phaser',
         this.game = game;
         this.map = map;
         this.setHunger(80);
-        this.minHungerLevel = 90;
+        this.minHungerLevel = 50;
+        this.setHungerRate(-2);
         this.foodOptions = [{type: 'tile', element: 'grass'}];
         var bbData = {
             minHungerLevel: this.minHungerLevel,
