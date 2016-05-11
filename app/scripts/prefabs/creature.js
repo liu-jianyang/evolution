@@ -22,6 +22,7 @@ define(['phaser',
     Creature.MAX_HUNGER = 100;
     Creature.DEFAULT_SPEED = 1;
     Creature.DEFAULT_HUNGER_RATE = -1;
+    Creature.DEFAULT_VISION_RANGE = 10;
     
     Creature.prototype.setHunger = function(hunger) {
         this.hunger = hunger;
@@ -82,6 +83,18 @@ define(['phaser',
         }
     };
     
+    Creature.prototype.setVisionRange = function(range) {
+        this.visionRange = range;
+    };
+    
+    Creature.prototype.getVisionRange = function() {
+        return this.visionRange || Creature.DEFAULT_VISION_RANGE;
+    };
+    
+    Creature.prototype.getPowerLevel = function() { //TODO
+        return this.powerLevel || 1;
+    };
+    
     //creature movement
     Creature.prototype.move = function(direction) {
         var distanceCovered = this.getSpeed() * Config.options.tileSize;
@@ -127,6 +140,11 @@ define(['phaser',
             }
         }
     };
+    
+    Creature.prototype.withinRange = function(enemy) {
+        return ((this.getX() === enemy.getX()) && (Phaser.Math.difference(this.getY(), enemy.getY()) === 1)) || 
+               ((this.getY() === enemy.getY()) && (Phaser.Math.difference(this.getX(), enemy.getX()) === 1));
+    }
     
     Creature.prototype.eat = function() {
         //to be overridden

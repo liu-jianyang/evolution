@@ -21,14 +21,18 @@ define(['phaser', 'behaviors/core/behavior', 'config'], function(Phaser, Behavio
         //     this.fail();
         //     return;
         // }
-        var moveLocation;
-        if (typeof(this.params) === 'string') {
-            moveLocation = this.blackboard.get(this.params)[0];
-        } else {
-            moveLocation = this.params;
+        if (!this.moveLocation) {
+            if (typeof(this.params) === 'string') {
+                this.moveLocation = this.blackboard.get(this.params);
+            } else {
+                this.moveLocation = this.params;
+            }
         }
-        if (!isCreatureAtDestination(creature, moveLocation)) {
-            moveCreature(creature, moveLocation);
+        if (!this.moveLocation.x || !this.moveLocation.y) {
+            this.fail();
+        }
+        if (!isCreatureAtDestination(creature, this.moveLocation)) {
+            moveCreature(creature, this.moveLocation);
         } else {
             this.succeed();
         }

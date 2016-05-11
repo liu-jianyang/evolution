@@ -7,8 +7,9 @@ define(['behaviors/actions/moveto',
         'behaviors/composites/selector',
         'behaviors/composites/sequence',
         'behaviors/conditions/ishungry',
+        'behaviors/conditions/enemyinrange',
         'behaviors/decorators/repeat',
-        'behaviors/core/blackboard'], function(MoveTo, Search, Wander, Eat, Selector, Sequence, IsHungry, Repeat, Blackboard) {
+        'behaviors/core/blackboard'], function(MoveTo, Search, Wander, Eat, Selector, Sequence, IsHungry, EnemyInRange, Repeat, Blackboard) {
     'use strict';
     /*
     {
@@ -65,6 +66,8 @@ define(['behaviors/actions/moveto',
                 return new Sequence(game, blackboard);
             case 'IsHungry':
                 return new IsHungry(game, blackboard, params);
+            case 'EnemyInRange':
+                return new EnemyInRange(game, blackboard, params);
             case 'Eat':
                 return new Eat(game, blackboard);
             case 'Repeat':

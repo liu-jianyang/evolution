@@ -27,6 +27,7 @@ define(['phaser',
             this.backgroundLayer.resizeWorld();
             elephant = new Elephant(this.game, 5, 7, this.game.map);
             hydra = new Hydra(this.game, 6, 11, this.game.map);
+            this.game.creatures = [elephant, hydra];
             this.game.add.existing(elephant);
             this.game.add.existing(hydra);
             

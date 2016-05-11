@@ -2,28 +2,26 @@
 
 define(['phaser', 'behaviors/actions/search', 'behaviors/core/behavior', 'config'], function(Phaser, Search, Behavior, Config) {
     'use strict';
-    function EnemyVisible(game, blackboard) {
+    function EnemyInRange(game, blackboard) {
         Behavior.call(this, game);
+        this.name = 'EnemyInRange';
         this.game = game;
         this.blackboard = blackboard;
-        this.name = 'EnemyVisible';
     }
 
-    Config.inheritPrototype(EnemyVisible, Behavior);
+    Config.inheritPrototype(EnemyInRange, Behavior);
 
-    EnemyVisible.prototype.constructor = EnemyVisible;
-    EnemyVisible.prototype.parent = Behavior.prototype;
+    EnemyInRange.prototype.constructor = EnemyInRange;
+    EnemyInRange.prototype.parent = Behavior.prototype;
     
-    EnemyVisible.prototype.act = function(creature) {
+    EnemyInRange.prototype.act = function(creature) {
         if (!this.isRunning()) {
             return;
         }
         
         var enemiesWithinRange = [];
         _.each(this.game.creatures, function(enemy) {
-            if (creature.getX !== enemy.getX() && 
-                creature.getY !== enemy.getY() && 
-                Phaser.Math.difference(creature.getX(), creature.getY(), enemy.getX(), enemy.getY()) <= creature.getVisionRange()) {
+            if (creature.getX !== enemy.getX() && creature.getY !== enemy.getY() && creature.withinRange(enemy)) {
                 enemiesWithinRange.push(enemy);
             }
         });
@@ -31,15 +29,16 @@ define(['phaser', 'behaviors/actions/search', 'behaviors/core/behavior', 'config
             this.blackboard.set(this.name, _.sortBy(enemiesWithinRange, function(enemy) {
                 return Phaser.Math.distance(creature.getX(), creature.getY(), enemy.getX(), enemy.getY());
             }));
+            console.log('enemyinrange', this.blackboard.get(this.name));
             this.succeed();
         } else {
             this.fail();
         }
     };
     
-    EnemyVisible.prototype.reset = function() {
+    EnemyInRange.prototype.reset = function() {
         this.start();
     };
 
-    return EnemyVisible;
+    return EnemyInRange;
 });

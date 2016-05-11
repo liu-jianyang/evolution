@@ -39,6 +39,10 @@ define(['phaser',
         // this.animations.play(direction);
     };
     
+    // Hydra.prototype.withinRange = function(enemy) {
+        
+    // }
+    
     Hydra.prototype.eat = function() {
         //if hungry and can eat tile or whatever's on tile, eat
         if (this.getHunger() < this.minHungerLevel) {

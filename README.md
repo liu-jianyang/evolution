@@ -5,22 +5,40 @@
      `-----'`--' `---'  `----'  `---'  `--'    `--'`-------' `------'
     ----------------------------------------------------------------- 
 
+This is a game of betting. Monsters fight in an arena, overwatched by a judge, 
+or more, with spectators betting on who will win. However, the spectators are
+all mages, and thus each believe that s/he can influence the arena to some 
+degree, to ensure that the monsters they bet on will win. There are a variety
+of ways for them to do so, from small things as enchanting the ground to be 
+more slippery to increasing one of the monsters' strength, to causing a volcano 
+to explode. However, the bigger the effect, the more likely the judge(s) will 
+take notice, though at their discretion they may choose to do nothing at all, 
+or they may reverse all enchantments on a monster.
 
-Hi there! Welcome to Cloud9 IDE!
+Arena:
+Randomly generated
+Parts of the terrain may be more favorable to one monster than another.
+Contains spawn points scattered throughout where gear or potions may show up
+    randomly.
 
-To get you started, we included a small hello world application.
+Monsters:
+Each has a separate AI based on their intelligence.
+May be able to equip gear based on physique.
+Can get hungry, and so must forage for food. //Optional?
+Skills:
+    Attack
+    Health
+    Defense
+    Critical rate
+    Movement speed
+    Beneficial terrain
+    Harmful terrain
+    Gear
 
-1) Open the hello-world.html file
-
-2) Click on the Preview button to open a live preview pane
-
-3) Make some changes to the file, save, watch the preview, and have fun!
-
-Happy coding!
-The Cloud9 IDE team
-
-
-## Support & Documentation
-
-Visit http://docs.c9.io for documentation, or http://support.c9.io for support.
-To watch some training videos, visit http://www.youtube.com/user/c9ide
+Mages:
+Indirect minor spells
+Direct spells
+    Enchantments
+    Attacks
+Indirect major spells
+Influencing the judge(s)

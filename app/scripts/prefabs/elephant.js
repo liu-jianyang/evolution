@@ -24,7 +24,7 @@ define(['phaser',
             },
             children: [
                 {
-                    name: 'IsHungry'
+                    name: 'EnemyInRange'
                 },
                 {
                     name: 'Search',
@@ -50,6 +50,10 @@ define(['phaser',
     Elephant.prototype.playAnimation = function(direction) {
         // this.animations.play(direction);
     };
+    
+    // Elephant.prototype.withinRange = function(enemy) {
+        
+    // }
     
     Elephant.prototype.eat = function() {
         //if hungry and can eat tile or whatever's on tile, eat
