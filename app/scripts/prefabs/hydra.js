@@ -42,7 +42,7 @@ define(['phaser',
     Hydra.prototype.eat = function() {
         //if hungry and can eat tile or whatever's on tile, eat
         if (this.getHunger() < this.minHungerLevel) {
-            var tile = this.game.map.getTile(this.getX(), this.getY());
+            var tile = this.map.getTile(this.getX(), this.getY());
             if (hasProperties(tile)) {
                 var isTileFoodOption = _.find(this.foodOptions, function(option) {
                     return option.element === tile.properties.type;
