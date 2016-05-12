@@ -1,6 +1,8 @@
 define(['phaser', 'behaviors/core/behavior', 'config'], function(Phaser, Behavior, Config) {
     'use strict';
 
+    //Params: Array -> ['string', index]
+    //        Object -> {x: x, y: y}
     function MoveTo(game, blackboard, params) {
         this.params = params;
         Behavior.call(this, game);
@@ -22,9 +24,9 @@ define(['phaser', 'behaviors/core/behavior', 'config'], function(Phaser, Behavio
         //     return;
         // }
         if (!this.moveLocation) {
-            if (typeof(this.params) === 'string') {
-                this.moveLocation = this.blackboard.get(this.params);
-            } else {
+            if (_.isArray(this.params)) {
+                this.moveLocation = this.blackboard.get(this.params[0])[this.params[1]];
+            } else if (_.isObject(this.params)) {
                 this.moveLocation = this.params;
             }
         }

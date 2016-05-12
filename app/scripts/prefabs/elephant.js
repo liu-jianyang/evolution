@@ -24,7 +24,7 @@ define(['phaser',
             },
             children: [
                 {
-                    name: 'EnemyInRange'
+                    name: 'EnemyVisible'
                 },
                 {
                     name: 'Search',
@@ -32,7 +32,7 @@ define(['phaser',
                 },
                 {
                     name: 'MoveTo',
-                    params: 'searchLocations'
+                    params: ['searchLocations', 0]
                 },
                 {
                     name: 'Eat'

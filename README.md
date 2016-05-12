@@ -34,6 +34,7 @@ Skills:
     Beneficial terrain
     Harmful terrain
     Gear
+    Quaff potions
 
 Mages:
 Indirect minor spells
@@ -42,3 +43,11 @@ Direct spells
     Attacks
 Indirect major spells
 Influencing the judge(s)
+
+-------------------------------------------------
+Behaviors
+MoveTo:
+    Takes in either an array or a hash
+    Array: ['string', index]. Take from the blackboard an array with key 
+        'string', and take the index element of it as the destination
+    Hash: Simply the destination
