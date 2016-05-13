@@ -13,10 +13,11 @@ define(['phaser',
     
     Level.prototype = {
         init: function() {
-            
+            this.game.enableStep();
         },
       
         create: function() {
+            var game = this.game;
             this.updateDelay = 0;
             this.game.map = this.game.add.tilemap('level');
             this.game.map.addTilesetImage('tiles', 'gameTiles');
@@ -35,14 +36,13 @@ define(['phaser',
             var tile = this.game.map.getTile(3, 4);
 
             tile.properties.type = 'grass';
+            setInterval(function() {
+                game.step();
+            }, 500);
         },
         
-        // update: function() {
-        //     // this.updateDelay++;
-        //     // if (this.updateDelay % (10 - Config.options.gameSpeed) === 0) {
-        //     //     // sheep.update();
-        //     // }
-        // }
+        update: function() {
+        }
     
     };
       

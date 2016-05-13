@@ -197,8 +197,6 @@ define(['phaser',
     
     Creature.prototype.setBehavior = function(behavior) {
         this.behavior = behavior;
-        //TODO: Timeout not working anymore for some reason
-        this.timeoutBehavior = Config.doEveryTimeout(this.behavior.rand, 500, this);
     };
     
     Creature.prototype.update = function() {

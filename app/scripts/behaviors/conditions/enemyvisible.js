@@ -27,16 +27,15 @@ define(['phaser', 'behaviors/actions/search', 'behaviors/core/behavior', 'config
                 enemiesWithinRange.push(enemy);
             }
         });
-        console.log('within range:', enemiesWithinRange);
         if (enemiesWithinRange.length > 0) {
             enemiesWithinRange = _.sortBy(enemiesWithinRange, function(enemy) {
                 return Phaser.Math.distance(creature.getX(), creature.getY(), enemy.getX(), enemy.getY());
             });
-            var enemyLocations = _.map(enemiesWithinRange, function(enemy) {
-                return {x: enemy.getX(), y: enemy.getY()};
-            });
+            // var enemyLocations = _.map(enemiesWithinRange, function(enemy) {
+            //     return {x: enemy.getX(), y: enemy.getY()};
+            // });
             this.blackboard.set(this.name, enemiesWithinRange);
-            this.blackboard.set('EnemyLocations', enemyLocations);
+            // this.blackboard.set('EnemyLocations', enemyLocations);
             this.succeed();
         } else {
             this.fail();
