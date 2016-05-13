@@ -12,11 +12,9 @@ define(['phaser',
         this.game = game;
         this.map = map;
         this.setHunger(80);
-        this.minHungerLevel = 90;
-        this.foodOptions = [{type: 'tile', element: 'grass'}];
-        var bbData = {
-            minHungerLevel: this.minHungerLevel
-        }
+        this.setHealth(300);
+        this.setAttack(70);
+        this.setDefense(35);
         var bt = new BehaviorTree(game, {
             root: {
                 name: 'Repeat'
@@ -26,8 +24,8 @@ define(['phaser',
                     name: 'Wander'
                 }
             ]
-        }, bbData)
-        this.setBehavior(bt.getRoot());
+        })
+        // this.setBehavior(bt.getRoot());
     }
 
     Config.inheritPrototype(Hydra, Creature);

@@ -2,45 +2,41 @@
 
 define(['phaser', 'behaviors/core/behavior', 'config'], function(Phaser, Behavior, Config) {
     'use strict';
-    var self;
-    function UntilSucceed(game, behavior) {
+    function UntilSucceed(game, blackboard) {
         Behavior.call(this, game);
-        this.behavior = behavior;
         this.name = 'UntilSucceed';
-        self = this;
+        this.game = game;
+        this.blackboard = blackboard;
     }
 
     Config.inheritPrototype(UntilSucceed, Behavior);
 
     UntilSucceed.prototype.constructor = UntilSucceed;
     UntilSucceed.prototype.parent = Behavior.prototype;
-    UntilSucceed.prototype.start = function() {
-        self.parent.start();
-        self.behavior.start();
-    };
-    
     
     UntilSucceed.prototype.act = function(creature) {
-        if (self.isRunning()) {
-            if (!creature.isAlive()) {
-                self.fail();
-                return;
-            }
-            
-            self.behavior.act();
-            
-            if (self.behavior.isSuccess()) {
-                self.succeed();
-                return;
-            } 
-            if (!self.behavior.isRunning()) {
-                self.behavior.reset();
-            }
+        if (!this.isRunning()) {
+            return;
+        }
+        if (!creature.isAlive()) {
+            this.fail();
+            return;
+        }
+        var node = this.getChildren()[0];
+        if (!node.getState()) {
+            node.start();
+        }
+        node.act(creature);
+        if (node.isSuccess()) {
+            this.succeed();
+        } else if (node.isFailure()) {
+            node.reset();
         }
     };
     
     UntilSucceed.prototype.reset = function() {
-        self.start();
+        this.getChildren()[0].reset();
+        this.start();
     };
 
     return UntilSucceed;

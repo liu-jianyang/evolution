@@ -11,34 +11,42 @@ define(['phaser',
         this.game = game;
         this.map = map;
         this.setHunger(80);
-        this.minHungerLevel = 50;
+        this.setHealth(500);
+        this.setAttack(50);
+        this.setDefense(80);
         this.setHungerRate(-2);
-        this.foodOptions = [{type: 'tile', element: 'grass'}];
-        var bbData = {
-            minHungerLevel: this.minHungerLevel,
-            searchOptions: this.foodOptions
-        }
+        this.setFoodOptions({type: 'tile', element: 'grass'});
         var bt = new BehaviorTree(game, {
             root: {
-                name: 'Sequence'
+                name: 'UntilFail',
+                type: 'decorator'
             },
             children: [
                 {
-                    name: 'EnemyVisible'
-                },
-                {
-                    name: 'Search',
-                    params: 'searchLocations'
-                },
-                {
-                    name: 'MoveTo',
-                    params: ['searchLocations', 0]
-                },
-                {
-                    name: 'Eat'
+                    name: 'Sequence',
+                    type: 'composite',
+                    children: [
+                        {
+                            name: 'EnemyVisible',
+                            type: 'condition'
+                        },
+                        {
+                            name: 'UntilSucceed',
+                            type: 'condition',
+                            children: [
+                                {
+                                    name: 'AttackEnemy',
+                                    params: 'EnemyVisible',
+                                    type: 'action'
+                                }
+                            ]
+                        }
+                    ]
                 }
+                        
+                
             ]
-        }, bbData)
+        })
         this.setBehavior(bt.getRoot());
     }
 

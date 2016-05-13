@@ -4,13 +4,16 @@ define(['behaviors/actions/moveto',
         'behaviors/actions/search',
         'behaviors/actions/wander',
         'behaviors/actions/eat',
+        'behaviors/actions/attackenemy',
         'behaviors/composites/selector',
         'behaviors/composites/sequence',
         'behaviors/conditions/ishungry',
         'behaviors/conditions/enemyvisible',
         'behaviors/conditions/enemyinrange',
         'behaviors/decorators/repeat',
-        'behaviors/core/blackboard'], function(MoveTo, Search, Wander, Eat, Selector, Sequence, IsHungry, EnemyVisible, EnemyInRange, Repeat, Blackboard) {
+        'behaviors/decorators/untilsucceed',
+        'behaviors/decorators/untilfail',
+        'behaviors/core/blackboard'], function(MoveTo, Search, Wander, Eat, AttackEnemy, Selector, Sequence, IsHungry, EnemyVisible, EnemyInRange, Repeat, UntilSucceed, UntilFail, Blackboard) {
     'use strict';
     /*
     {
@@ -18,7 +21,13 @@ define(['behaviors/actions/moveto',
             name:
             params:
         }
-        children: []
+        children: [
+            {
+                name:
+                params:
+                children:
+            }
+        ]
     }
     */
     function BehaviorTree(game, data, blackboardData) {
@@ -33,8 +42,8 @@ define(['behaviors/actions/moveto',
             var child = returnConstructedBehavior(node.name, node.params, game, blackboard);
             parent.addChild(child);
             child.setParent(parent);
-            if (child.children && child.children.length > 0) {
-                helper(child, child.children);
+            if (node.children && node.children.length > 0) {
+                helper(child, node.children, game, blackboard);
             } 
         });
     }
@@ -61,6 +70,8 @@ define(['behaviors/actions/moveto',
                 return new Search(game, blackboard, params);
             case 'Wander':
                 return new Wander(game, blackboard);
+            case 'AttackEnemy':
+                return new AttackEnemy(game, blackboard, params);
             case 'Selector':
                 return new Selector(game, blackboard);
             case 'Sequence':
@@ -75,6 +86,10 @@ define(['behaviors/actions/moveto',
                 return new Eat(game, blackboard);
             case 'Repeat':
                 return new Repeat(game, blackboard, params);
+            case 'UntilSucceed':
+                return new UntilSucceed(game, blackboard);
+            case 'UntilFail':
+                return new UntilFail(game, blackboard);
             default:
                 break;
             

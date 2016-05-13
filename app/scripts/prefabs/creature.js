@@ -10,6 +10,8 @@ define(['phaser',
         this.sprite = Phaser.Sprite.call(this, game, trueX, trueY, imageRef);
         // this.anchor.setTo(0.5, 0.5);
         this.deadRef = deadRef;
+        this.maxHungerLevel = 100;
+        this.minHungerLevel = this.maxHungerLevel / 2;
         this.notifyHunger = [false, false, false];
     }
 
@@ -19,10 +21,29 @@ define(['phaser',
     Creature.WIDTH = 32;
     Creature.HEIGHT = 29;
     Creature.MOVE_DURATION = 150;
-    Creature.MAX_HUNGER = 100;
     Creature.DEFAULT_SPEED = 1;
     Creature.DEFAULT_HUNGER_RATE = -1;
     Creature.DEFAULT_VISION_RANGE = 10;
+    
+    Creature.prototype.setHealth = function(health) {
+        this.maxHealth = health;
+        this.health = health;
+    };
+    
+    Creature.prototype.setAttack = function(attack) {
+        this.attack = attack;
+    };
+    
+    Creature.prototype.setDefense = function(defense) {
+        this.defense = defense;
+    };
+    
+    Creature.prototype.changeHealth = function(amount) {
+        this.health = Phaser.Math.min(this.maxHealth, this.health + amount);
+        if (this.health <= 0) {
+            this.die();
+        }
+    };
     
     Creature.prototype.setHunger = function(hunger) {
         this.hunger = hunger;
@@ -144,26 +165,32 @@ define(['phaser',
     Creature.prototype.withinRange = function(enemy) {
         return ((this.getX() === enemy.getX()) && (Phaser.Math.difference(this.getY(), enemy.getY()) === 1)) || 
                ((this.getY() === enemy.getY()) && (Phaser.Math.difference(this.getX(), enemy.getX()) === 1));
-    }
+    };
+    
+    Creature.prototype.harm = function(enemy) {
+        console.log('attack');
+        var damage = (this.attack || 1) - (enemy.defense || 1);
+        enemy.changeHealth(-Phaser.Math.max(damage, 1));  
+    };
     
     Creature.prototype.eat = function() {
         //to be overridden
     };
     
     Creature.prototype.isAlive = function() {
-        return this.alive;
+        console.log('isAlive:', this.health);
+        return this.health > 0;
     };
     
     Creature.prototype.canMove = function() {
         return true; //TODO
-    }
+    };
     
     Creature.prototype.canSearch = function() {
         return true; //TODO
-    }
+    };
     
     Creature.prototype.die = function() {
-        this.damage(this.health);
         this.loadTexture(this.deadRef);
         this.visible = true;
     };

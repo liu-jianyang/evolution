@@ -1,12 +1,14 @@
 define(['phaser',
         'behaviors/core/behavior',
-        'behaviors/core/behaviortree',
-        'config'], function(Phaser, Behavior, BehaviorTree, Config) {
+        'behaviors/actions/moveto',
+        'config'], function(Phaser, Behavior, MoveTo, Config) {
     'use strict';
 
-    function AttackEnemy(game, blackboard) {
+    function AttackEnemy(game, blackboard, params) {
         Behavior.call(this, game);
+        this.game = game;
         this.blackboard = blackboard;
+        this.params = params;
     }
 
     Config.inheritPrototype(AttackEnemy, Behavior);
@@ -18,11 +20,20 @@ define(['phaser',
         if (!this.isRunning()) {
             return;
         }
-        var closestEnemy = this.blackboard.get('EnemyInRange')[0];
-        if (creature.attack(closestEnemy)) {
+        var closestEnemy = this.blackboard.get(this.params)[0];
+        console.log(creature.attack);
+        if (creature.withinRange(closestEnemy)) {
+            creature.harm(closestEnemy);
+            console.log('closestEnemy:', closestEnemy);
             this.succeed();
         } else {
-            this.fail();
+            var dest = {x: closestEnemy.getX(), y: closestEnemy.getY()}
+            var moveTo = new MoveTo(this.game, this.blackboard, dest);
+            moveTo.start();
+            moveTo.act(creature);
+            if (moveTo.isFailure()) {
+                this.fail();
+            }
         }
     };
     

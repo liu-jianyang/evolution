@@ -15,6 +15,7 @@ define(['phaser', 'behaviors/actions/search', 'behaviors/core/behavior', 'config
     EnemyInRange.prototype.parent = Behavior.prototype;
     
     EnemyInRange.prototype.act = function(creature) {
+        console.log('enemyInrange');
         if (!this.isRunning()) {
             return;
         }
@@ -29,7 +30,6 @@ define(['phaser', 'behaviors/actions/search', 'behaviors/core/behavior', 'config
             this.blackboard.set(this.name, _.sortBy(enemiesWithinRange, function(enemy) {
                 return Phaser.Math.distance(creature.getX(), creature.getY(), enemy.getX(), enemy.getY());
             }));
-            console.log('enemyinrange', this.blackboard.get(this.name));
             this.succeed();
         } else {
             this.fail();

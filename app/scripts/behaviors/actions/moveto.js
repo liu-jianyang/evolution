@@ -1,11 +1,11 @@
 define(['phaser', 'behaviors/core/behavior', 'config'], function(Phaser, Behavior, Config) {
     'use strict';
 
-    //Params: Array -> ['string', index]
+    //Params: Array -> ['string', index] index can be string 'random'
     //        Object -> {x: x, y: y}
     function MoveTo(game, blackboard, params) {
-        this.params = params;
         Behavior.call(this, game);
+        this.game = game;
         this.blackboard = blackboard;
         this.params = params;
     }
@@ -25,7 +25,14 @@ define(['phaser', 'behaviors/core/behavior', 'config'], function(Phaser, Behavio
         // }
         if (!this.moveLocation) {
             if (_.isArray(this.params)) {
-                this.moveLocation = this.blackboard.get(this.params[0])[this.params[1]];
+                var locations = this.blackboard.get(this.params[0]);
+                var index;
+                if (this.params[1] === 'random') {
+                    index = this.game.rnd(0, locations.length - 1);
+                } else {
+                    index = this.params[1];
+                }
+                this.moveLocation = locations[index];
             } else if (_.isObject(this.params)) {
                 this.moveLocation = this.params;
             }

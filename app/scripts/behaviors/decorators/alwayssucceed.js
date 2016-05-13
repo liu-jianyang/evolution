@@ -2,41 +2,39 @@
 
 define(['phaser', 'behaviors/core/behavior', 'config'], function(Phaser, Behavior, Config) {
     'use strict';
-    var self;
-    function AlwaysSucceed(game, behavior) {
+    function AlwaysSucceed(game, blackboard) {
         Behavior.call(this, game);
-        this.behavior = behavior;
         this.name = 'AlwaysSucceed';
-        self = this;
+        this.game = game;
+        this.blackboard = blackboard;
     }
 
     Config.inheritPrototype(AlwaysSucceed, Behavior);
 
     AlwaysSucceed.prototype.constructor = AlwaysSucceed;
     AlwaysSucceed.prototype.parent = Behavior.prototype;
-    AlwaysSucceed.prototype.start = function() {
-        self.parent.start();
-        self.behavior.start();
-    };
     
     AlwaysSucceed.prototype.act = function(creature) {
-        if (self.isRunning()) {
-            if (!creature.isAlive()) {
-                self.fail();
-                return;
-            }
-            
-            self.behavior.act();
-            
-            if (!self.behavior.isRunning()) {
-                self.succeed();
-            }
-            
+        if (!this.isRunning()) {
+            return;
+        }
+        if (!creature.isAlive()) {
+            this.fail();
+            return;
+        }
+        var node = this.getChildren()[0];
+        if (!node.getState()) {
+            node.start();
+        }
+        node.act(creature);
+        if (node.isSuccess() || node.isFailure()) {
+            this.succeed();
         }
     };
     
     AlwaysSucceed.prototype.reset = function() {
-        self.start();
+        this.getChildren()[0].reset();
+        this.start();
     };
 
     return AlwaysSucceed;

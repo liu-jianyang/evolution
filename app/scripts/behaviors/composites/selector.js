@@ -44,6 +44,9 @@ define(['phaser', 'behaviors/core/behavior', 'config'], function(Phaser, Behavio
     
     Selector.prototype.reset = function() {
         self.index = 0;
+        _.each(this.getChildren(), function(child) {
+            child.reset();
+        });
         self.start();
     };
 

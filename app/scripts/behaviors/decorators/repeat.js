@@ -47,6 +47,7 @@ define(['phaser', 'behaviors/core/behavior', 'config'], function(Phaser, Behavio
     
     Repeat.prototype.reset = function() {
         this.numRepeated = 0;
+        this.getChildren()[0].reset();
         this.start();
     };
 
