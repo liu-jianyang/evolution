@@ -6,6 +6,7 @@ define(['phaser', 'behaviors/actions/search', 'behaviors/core/behavior', 'config
         Behavior.call(this, game);
         this.game = game;
         this.blackboard = blackboard;
+        this.params = params;
         this.name = 'EnemyIsWeaker';
     }
 
@@ -18,12 +19,16 @@ define(['phaser', 'behaviors/actions/search', 'behaviors/core/behavior', 'config
         if (!this.isRunning()) {
             return;
         }
-        var enemy = this.blackboard.get('TargetEnemy');
-        if (creature.getPowerLevel() > enemy.getPowerLevel()) {
+        var enemies = _.filter(this.blackboard.get(this.params), function(enemy) {
+            return creature.getPowerLevel() > enemy.getPowerLevel();
+        });
+        if (enemies.length > 0) {
+            this.blackboard.set(this.name, enemies);
             this.succeed();
-        } else if (this.search.isFailure()) {
+        } else {
             this.fail();
         }
+            
     };
     
     EnemyIsWeaker.prototype.reset = function() {

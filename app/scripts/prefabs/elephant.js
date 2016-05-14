@@ -16,6 +16,7 @@ define(['phaser',
         this.setDefense(80);
         this.setHungerRate(-2);
         this.setFoodOptions({type: 'tile', element: 'grass'});
+        this.setVisionRange(2);
         var bt = new BehaviorTree(game, {
             root: {
                 name: 'UntilFail',

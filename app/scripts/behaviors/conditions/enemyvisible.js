@@ -3,7 +3,6 @@
 define(['phaser', 'behaviors/actions/search', 'behaviors/core/behavior', 'config'], function(Phaser, Search, Behavior, Config) {
     'use strict';
     function EnemyVisible(game, blackboard) {
-        console.log(game);
         Behavior.call(this, game);
         this.game = game;
         this.blackboard = blackboard;

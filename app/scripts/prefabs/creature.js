@@ -1,10 +1,11 @@
 define(['phaser', 
         'config',
-        ], function(Phaser, 
-                    Config) {
+        'behaviors/core/behaviortree'
+        ], function(Phaser, Config, BehaviorTree) {
     'use strict';
     
     function Creature(game, x, y, imageRef, deadRef) {
+        this.game = game;
         var trueX = x * Config.options.tileSize;
         var trueY = y * Config.options.tileSize;
         this.sprite = Phaser.Sprite.call(this, game, trueX, trueY, imageRef);
@@ -168,7 +169,6 @@ define(['phaser',
     };
     
     Creature.prototype.harm = function(enemy) {
-        console.log('attack');
         var damage = (this.attack || 1) - (enemy.defense || 1);
         enemy.changeHealth(-Phaser.Math.max(damage, 1));  
     };
@@ -178,7 +178,6 @@ define(['phaser',
     };
     
     Creature.prototype.isAlive = function() {
-        console.log('isAlive:', this.health);
         return this.health > 0;
     };
     
@@ -206,6 +205,61 @@ define(['phaser',
                 this.behavior.start();
             }
             this.behavior.act(this);
+        } else {
+            var bt = new BehaviorTree(this.game, {
+                root: {
+                    name: 'Repeat',
+                    type: 'decorator'
+                },
+                children: [
+                    {
+                        name: 'Selector',
+                        type: 'composite',
+                        children: [
+                            {
+                                name: 'Sequence',
+                                type: 'composite',
+                                children: [
+                                    {
+                                        name: 'EnemyVisible',
+                                        type: 'condition'
+                                    },
+                                    {
+                                        name: 'AttackEnemy',
+                                        params: 'EnemyVisible',
+                                        type: 'action'
+                                    }
+                                ]
+                            },
+                            {
+                                name: 'Sequence',
+                                type: 'composite',
+                                children: [
+                                    {
+                                        name: 'IsHungry',
+                                        type: 'Condition'
+                                    },
+                                    {
+                                        name: 'Search',
+                                        type: 'action',
+                                        params: 'searchLocations'
+                                    },
+                                    {
+                                        name: 'MoveTo',
+                                        type: 'action',
+                                        params: ['searchLocations', 0]
+                                    }
+                                ]
+                            },
+                            {
+                                name: 'Wander',
+                                type: 'action'
+                            }
+                        ]
+                    }
+                ]
+            });
+            this.setBehavior(bt.getRoot());
         }
     };
     

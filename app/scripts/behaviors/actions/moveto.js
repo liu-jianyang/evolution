@@ -37,6 +37,7 @@ define(['phaser', 'behaviors/core/behavior', 'config'], function(Phaser, Behavio
                 this.moveLocation = this.params;
             }
         }
+        console.log('moveLocation:', this.moveLocation);
         if (!this.moveLocation.x || !this.moveLocation.y) {
             this.fail();
         }
