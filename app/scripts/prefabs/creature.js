@@ -9,6 +9,7 @@ define(['phaser',
         var trueX = x * Config.options.tileSize;
         var trueY = y * Config.options.tileSize;
         this.sprite = Phaser.Sprite.call(this, game, trueX, trueY, imageRef);
+        
         // this.anchor.setTo(0.5, 0.5);
         this.deadRef = deadRef;
         this.maxHungerLevel = 100;
@@ -25,6 +26,14 @@ define(['phaser',
     Creature.DEFAULT_SPEED = 1;
     Creature.DEFAULT_HUNGER_RATE = -1;
     Creature.DEFAULT_VISION_RANGE = 10;
+    
+    Creature.prototype.setName = function(name) {
+        this.name = name;
+    };
+    
+    Creature.prototype.getName = function() {
+        return this.name;
+    }
     
     Creature.prototype.setHealth = function(health) {
         this.maxHealth = health;

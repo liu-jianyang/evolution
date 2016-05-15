@@ -17,6 +17,7 @@ define(['phaser', 'config'], function(Phaser, Config) {
             //load game assets
             this.load.tilemap('level', '/app/data/images/sprites/rpg.json', null, Phaser.Tilemap.TILED_JSON);
             this.load.image('gameTiles', '/app/data/images/sprites/tileset.png');
+            this.load.image('dialogWindow', '/app/data/images/sprites/Menu_2.png');
 
             this.load.image('elephant', '/app/data/images/sprites/elephant/elephant.png');
             this.load.image('deadelephant', '/app/data/images/sprites/elephant/elephant_demonic.png');

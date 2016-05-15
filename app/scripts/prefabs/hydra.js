@@ -11,6 +11,7 @@ define(['phaser',
         Creature.call(this, game, x, y, imageRef, deadRef);
         this.game = game;
         this.map = map;
+        this.setName('Hydra');
         this.setHunger(80);
         this.setHealth(300);
         this.setAttack(70);
