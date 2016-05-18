@@ -10,17 +10,17 @@ define(['phaser', 'config'], function(Phaser, Config) {
     Behavior.prototype.constructor = Behavior;
     
     Behavior.prototype.start = function() {
-        console.log('Starting routine:', this.constructor.name);
+        console.debug('Starting routine:', this.constructor.name);
         this.state = 'Running';
     };
 
     Behavior.prototype.succeed = function() {
-        console.log('Routine %s succeeded', this.constructor.name);
+        console.debug('Routine %s succeeded', this.constructor.name);
         this.state = 'Success';
     };
 
     Behavior.prototype.fail = function() {
-        console.log('Routine %s failed', this.constructor.name);
+        console.debug('Routine %s failed', this.constructor.name);
         this.state = 'Failure';
     };
 

@@ -21,10 +21,8 @@ define(['phaser',
             return;
         }
         var closestEnemy = this.blackboard.get(this.params)[0];
-        console.log(creature.attack);
         if (creature.withinRange(closestEnemy)) {
             creature.harm(closestEnemy);
-            console.log('closestEnemy:', closestEnemy);
             this.succeed();
         } else {
             var dest = {x: closestEnemy.getX(), y: closestEnemy.getY()}

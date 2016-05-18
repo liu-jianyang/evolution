@@ -10,12 +10,14 @@ define(['phaser',
         Creature.call(this, game, x, y, imageRef, deadRef);
         this.game = game;
         this.map = map;
+        this.setName('Elephant');
         this.setHunger(80);
         this.setHealth(500);
         this.setAttack(50);
         this.setDefense(80);
         this.setHungerRate(-2);
         this.setFoodOptions({type: 'tile', element: 'grass'});
+        this.setVisionRange(2);
         var bt = new BehaviorTree(game, {
             root: {
                 name: 'UntilFail',

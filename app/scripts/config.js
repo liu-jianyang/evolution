@@ -13,7 +13,7 @@ define([], function() {
             musicVolume: 0.8,
             tileSize: 32,
             gameSpeed: 1, //max? Update per second
-            gameSize: {x: 640, y: 480},
+            gameSize: {x: 800, y: 600},
             onLoadUpdate: function() {
             },
             onLoadComplete: function() {
