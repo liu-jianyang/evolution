@@ -139,18 +139,21 @@ define(['phaser',
         _.each(mods, function(mod) {
             var length = modsGroup.children.length;
             var modGroup = game.add.group(modsGroup);
+            var statsGroup = _.find(spritesGroup.children, function(child) {
+                return child.name === 'statsGroup';
+            });
+            var profile = statsGroup.children[0];
             if (length === 0) {
-                var statsGroup = _.find(spritesGroup.children, function(child) {
-                    return child.name === 'statsGroup';
-                });
-                game.add.sprite(modsGroup.x + offset, statsGroup.children[0].y + statsGroup.children[0].width + offset, mod.type, undefined, modGroup);
-                game.add.sprite(modsGroup.x + offset, statsGroup.children[0].y + statsGroup.children[0].width + offset, mod.key, undefined, modGroup);
+                
+                console.log(statsGroup.children);
+                game.add.sprite(profile.x + offset, profile.y + profile.width + offset, mod.type, undefined, modGroup);
+                game.add.sprite(profile.x + offset, profile.y + profile.width + offset, mod.key, undefined, modGroup);
             } else {
                 var lastSprite = modsGroup.children[modsGroup.children.length - 2].children[0];
                 if (lastSprite.x + 2*lastSprite.width + offset > dialogWindow.x + dialogWindow.width) {
                     //next row
-                    game.add.sprite(modsGroup.x + offset, lastSprite.y + lastSprite.height + offset, mod.type, undefined, modGroup);
-                    game.add.sprite(modsGroup.x + offset, lastSprite.y + lastSprite.height + offset, mod.key, undefined, modGroup);
+                    game.add.sprite(profile.x + offset, lastSprite.y + lastSprite.height + offset, mod.type, undefined, modGroup);
+                    game.add.sprite(profile.x + offset, lastSprite.y + lastSprite.height + offset, mod.key, undefined, modGroup);
                 } else {
                     game.add.sprite(lastSprite.x + lastSprite.width + offset, lastSprite.y, mod.type, undefined, modGroup);
                     game.add.sprite(lastSprite.x + lastSprite.width + offset, lastSprite.y, mod.key, undefined, modGroup);
