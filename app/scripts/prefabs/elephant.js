@@ -20,34 +20,34 @@ define(['phaser',
         this.setVisionRange(2);
         var bt = new BehaviorTree(game, {
             root: {
-                name: 'UntilFail',
+                name: 'Search',
                 type: 'decorator'
-            },
-            children: [
-                {
-                    name: 'Sequence',
-                    type: 'composite',
-                    children: [
-                        {
-                            name: 'EnemyVisible',
-                            type: 'condition'
-                        },
-                        {
-                            name: 'UntilSucceed',
-                            type: 'condition',
-                            children: [
-                                {
-                                    name: 'AttackEnemy',
-                                    params: 'EnemyVisible',
-                                    type: 'action'
-                                }
-                            ]
-                        }
-                    ]
-                }
+            }
+            // children: [
+            //     {
+            //         name: 'Sequence',
+            //         type: 'composite',
+            //         children: [
+            //             {
+            //                 name: 'EnemyVisible',
+            //                 type: 'condition'
+            //             },
+            //             {
+            //                 name: 'UntilSucceed',
+            //                 type: 'condition',
+            //                 children: [
+            //                     {
+            //                         name: 'AttackEnemy',
+            //                         params: 'EnemyVisible',
+            //                         type: 'action'
+            //                     }
+            //                 ]
+            //             }
+            //         ]
+            //     }
                         
                 
-            ]
+            // ]
         })
         this.setBehavior(bt.getRoot());
     }

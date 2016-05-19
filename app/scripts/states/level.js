@@ -28,7 +28,11 @@ define(['phaser',
             
             //initialize creatures
             elephant = new Elephant(game, 5, 7, game.map);
+            game.physics.enable(elephant, Phaser.Physics.ARCADE);
+            elephant.body.immovable = true;
             hydra = new Hydra(game, 6, 11, game.map);
+            game.physics.enable(hydra, Phaser.Physics.ARCADE);
+            hydra.body.immovable = true;
             game.creatures = [elephant, hydra];
             game.add.existing(elephant);
             game.add.existing(hydra);
@@ -45,14 +49,20 @@ define(['phaser',
             var positionY = gameY - dialogSize.height;
             var offset = 0;
             _.each(game.creatures, function(creature) {
-                game.dialogWindow = game.add.sprite(positionX + offset, positionY, 'dialogWindow');
-                game.dialogWindow.width = dialogSize.width;
-                game.dialogWindow.height = dialogSize.height;
-                game.add.sprite(positionX + offset + 5, positionY + 5, creature.key);
+                creature.spritesGroup = game.add.group();
+                var dialogWindow = game.add.sprite(positionX + offset, positionY, 'dialogWindow', undefined, creature.spritesGroup);
+                dialogWindow.width = dialogSize.width;
+                dialogWindow.height = dialogSize.height;
+                dialogWindow.name = 'dialogWindow';
+                
+                //stats
+                var statsGroup = game.add.group(creature.spritesGroup, 'statsGroup');
+                var creatureWindow = game.add.sprite(positionX + offset + 5, positionY + 5, creature.key, undefined, statsGroup);
+                var healthBarText = game.add.text(offset + creatureWindow.width + 5, positionY + 5, creature.health + '/' + creature.maxHealth, {font: '10px Arial'}, statsGroup);
+                healthBarText.name = 'healthBarText';
+                
                 offset += dialogSize.width;
             });
-                
-            // game.dialogText = game.add.text(positionX + 5, positionY + 5, 'Hello!');
             
             //temporary
             game.map.putTile(this.grassHsh.halfMature, 3, 4);
@@ -65,7 +75,15 @@ define(['phaser',
         },
         
         update: function() {
-            // game.dialogText.setText("Step count: " + game.stepCount);
+            _.each(game.creatures, function(creature) {
+                var statsGroup = _.find(creature.spritesGroup.children, function(child) {
+                    return child.name === 'statsGroup';
+                });
+                var healthBarText = _.find(statsGroup.children, function(child) {
+                    return child.name === 'healthBarText';
+                });
+                healthBarText.setText(creature.health + '/' + creature.maxHealth);
+            });
         },
         
         render: function() {
