@@ -84,6 +84,17 @@ define(['phaser',
                 });
                 healthBarText.setText(creature.health + '/' + creature.maxHealth);
             });
+            
+            //for testing purposes
+            if (game.stepCount === 5) {
+                game.creatures[0].addMod({key: 'haste', type: 'buff'});
+                game.creatures[0].addMod({key: 'confuse', type: 'debuff'});
+                game.creatures[0].addMod({key: 'slow', type: 'debuff'});
+                console.log(game.creatures[0].spritesGroup)
+            }
+            if (game.stepCount === 8) {
+                game.creatures[0].removeMod({key: 'haste'});
+            }
         },
         
         render: function() {

@@ -126,44 +126,58 @@ define(['phaser',
         return this.powerLevel || 1;
     };
     
-    Creature.prototype.addMod = function(mod) {
-        var modsGroup;
-        if (!this.mods) {
-            this.mods = [];
-            modsGroup = this.game.add.group(this.spritesGroup, 'modsGroup');
-        } else {
-            modsGroup = _.find(this.spritesGroup.children, function(child) {
-                return child.name === 'modsGroup';
-            });
-        }
-        this.mods.push(mod);
-        
+    function renderMods(game, spritesGroup, mods) {
         var modSize = 20;
         var offset = 5;
-        var dialogWindow = _.find(this.spritesGroup.children, function(child) {
+        var modsGroup = _.find(spritesGroup.children, function(child) {
+            return child.name === 'modsGroup';
+        });
+        modsGroup = modsGroup ? modsGroup : game.add.group(spritesGroup, 'modsGroup');
+        var dialogWindow = _.find(spritesGroup.children, function(child) {
             return child.name === 'dialogWindow';
         });
-        if (modsGroup.children.length === 0) {
-            var statsGroup = _.find(this.spritesGroup.children, function(child) {
-                return child.name === 'statsGroup';
-            });
-            this.game.add.sprite(modsGroup.x + offset, statsGroup.children[0].y + statsGroup.children[0].width + offset, mod.key, undefined, modsGroup);
-        } else {
-            var latestSprite = modsGroup.children[modsGroup.children.length - 1];
-            if (latestSprite.x + 2*latestSprite.width + offset > dialogWindow.x + dialogWindow.width) {
-                //next row
-                this.game.add.sprite(modsGroup.x + offset, latestSprite.y + latestSprite.height + offset, mod.key, undefined, modsGroup);
+        _.each(mods, function(mod) {
+            var length = modsGroup.children.length;
+            var modGroup = game.add.group(modsGroup);
+            if (length === 0) {
+                var statsGroup = _.find(spritesGroup.children, function(child) {
+                    return child.name === 'statsGroup';
+                });
+                game.add.sprite(modsGroup.x + offset, statsGroup.children[0].y + statsGroup.children[0].width + offset, mod.type, undefined, modGroup);
+                game.add.sprite(modsGroup.x + offset, statsGroup.children[0].y + statsGroup.children[0].width + offset, mod.key, undefined, modGroup);
             } else {
-                this.game.add.sprite(latestSprite.x + latestSprite.width + offset, latestSprite.y, mod.key, undefined, modsGroup);
+                var lastSprite = modsGroup.children[modsGroup.children.length - 2].children[0];
+                if (lastSprite.x + 2*lastSprite.width + offset > dialogWindow.x + dialogWindow.width) {
+                    //next row
+                    game.add.sprite(modsGroup.x + offset, lastSprite.y + lastSprite.height + offset, mod.type, undefined, modGroup);
+                    game.add.sprite(modsGroup.x + offset, lastSprite.y + lastSprite.height + offset, mod.key, undefined, modGroup);
+                } else {
+                    game.add.sprite(lastSprite.x + lastSprite.width + offset, lastSprite.y, mod.type, undefined, modGroup);
+                    game.add.sprite(lastSprite.x + lastSprite.width + offset, lastSprite.y, mod.key, undefined, modGroup);
+                }
             }
+        });
+    }
+    
+    Creature.prototype.addMod = function(mod) {
+        if (!this.mods) {
+            this.mods = [];
         }
-        
+        this.mods.push(mod);
+        renderMods(this.game, this.spritesGroup, [mod]);
     };
     
     Creature.prototype.removeMod = function(removeMod) {
         this.mods = _.reject(this.mods, function(mod) {
-            return mod === removeMod; //TODO: Not just straight ===, but need to match properties
+            return mod.key === removeMod.key; //TODO: Not just straight ===, but need to match properties
         });
+        var modsGroup = _.find(this.spritesGroup.children, function(child) {
+            return child.name === 'modsGroup';
+        });
+        if (modsGroup) {
+            modsGroup.destroy(true);
+        }
+        renderMods(this.game, this.spritesGroup, this.mods);
     };
     
     //creature movement
