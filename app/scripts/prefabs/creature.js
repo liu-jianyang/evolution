@@ -44,8 +44,16 @@ define(['phaser',
         this.attack = attack;
     };
     
+    Creature.prototype.getAttack = function() {
+        return this.attack;
+    };
+    
     Creature.prototype.setDefense = function(defense) {
         this.defense = defense;
+    };
+    
+    Creature.prototype.getDefense = function() {
+        return this.defense;
     };
     
     Creature.prototype.changeHealth = function(amount) {

@@ -11,6 +11,10 @@ define(['phaser',
     var game, elephant, hydra;
     function Level() {}
     
+    function onMouseover() {
+        console.log('onMouseover');
+    }
+
     Level.prototype = {
         init: function() {
             this.game.enableStep();
@@ -28,11 +32,7 @@ define(['phaser',
             
             //initialize creatures
             elephant = new Elephant(game, 5, 7, game.map);
-            game.physics.enable(elephant, Phaser.Physics.ARCADE);
-            elephant.body.immovable = true;
             hydra = new Hydra(game, 6, 11, game.map);
-            game.physics.enable(hydra, Phaser.Physics.ARCADE);
-            hydra.body.immovable = true;
             game.creatures = [elephant, hydra];
             game.add.existing(elephant);
             game.add.existing(hydra);
@@ -57,8 +57,10 @@ define(['phaser',
                 
                 //stats
                 var statsGroup = game.add.group(creature.spritesGroup, 'statsGroup');
-                var creatureWindow = game.add.sprite(positionX + offset + 5, positionY + 5, creature.key, undefined, statsGroup);
-                var healthBarText = game.add.text(offset + creatureWindow.width + 5, positionY + 5, creature.health + '/' + creature.maxHealth, {font: '10px Arial'}, statsGroup);
+                var creatureProfile = game.add.sprite(positionX + offset + 5, positionY + 5, creature.key, undefined, statsGroup);
+                creatureProfile.inputEnabled = true;
+                creatureProfile.name = 'creatureProfile';
+                var healthBarText = game.add.text(offset + creatureProfile.width + 5, positionY + 5, creature.health + '/' + creature.maxHealth, {font: '10px Arial'}, statsGroup);
                 healthBarText.name = 'healthBarText';
                 
                 offset += dialogSize.width;
@@ -79,6 +81,27 @@ define(['phaser',
                 var statsGroup = _.find(creature.spritesGroup.children, function(child) {
                     return child.name === 'statsGroup';
                 });
+                var creatureProfile = _.find(statsGroup.children, function(child) {
+                    return child.name === 'creatureProfile';
+                });
+                var popupGroup;
+                if (creatureProfile.input.pointerOver()) {
+                    popupGroup = game.add.group(statsGroup, 'popupGroup');
+                    var popup = game.add.sprite(creatureProfile.x + creatureProfile.width, creatureProfile.y - 32, 'dialogWindow', undefined, popupGroup);
+                    popup.height = 32;
+                    popup.width = 64;
+                    var attackText = game.add.text(popup.x + 3, popup.y + 3, 'Attack: ' + creature.getAttack(), {font: '10px Arial'}, popupGroup);
+                    var defenseText = game.add.text(popup.x + 3, attackText.y + 8, 'Defense: ' + creature.getDefense(), {font: '10px Arial'}, popupGroup);
+                    game.add.text(popup.x + 3, defenseText.y + 8, 'Speed: ' + creature.getSpeed(), {font: '10px Arial'}, popupGroup);
+
+                } else {
+                    popupGroup = _.find(statsGroup.children, function(child) {
+                        return child.name === 'popupGroup';
+                    });
+                    if (popupGroup) {
+                        popupGroup.destroy();
+                    }
+                }
                 var healthBarText = _.find(statsGroup.children, function(child) {
                     return child.name === 'healthBarText';
                 });
@@ -86,11 +109,10 @@ define(['phaser',
             });
             
             //for testing purposes
-            if (game.stepCount === 5) {
+            if (game.stepCount > 5) {
                 game.creatures[0].addMod({key: 'haste', type: 'buff'});
                 game.creatures[0].addMod({key: 'confuse', type: 'debuff'});
-                game.creatures[0].addMod({key: 'slow', type: 'debuff'});
-                console.log(game.creatures[0].spritesGroup)
+                game.creatures[1].addMod({key: 'slow', type: 'debuff'});
             }
             if (game.stepCount === 8) {
                 game.creatures[0].removeMod({key: 'haste'});
