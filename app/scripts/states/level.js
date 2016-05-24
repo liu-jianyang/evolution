@@ -14,6 +14,66 @@ define(['phaser',
     function onMouseover() {
         console.log('onMouseover');
     }
+    
+    function setupSpells(game, spellArray) {
+        var spellGroup = game.add.group();
+        var windowPositionX = Config.options.gameSize.x - (64 + 15);
+        var windowPositionY = 0;
+        var spellSize = 32;
+        
+        var spellWindow = game.add.sprite(windowPositionX, windowPositionY, 'dialogWindow', undefined, spellGroup);
+        spellWindow.width = 2*spellSize + 15;
+        spellWindow.height = (5 + spellSize) * (Phaser.Math.ceilTo(spellArray.length / 2, 0, 10)) + 5;
+        var positionX = windowPositionX, 
+            positionY = windowPositionY;
+            
+        //TODO: Change positionX and positionY only when there's another element
+        _.each(spellArray, function(spell) {
+            var x = positionX + 5;
+            var y = positionY + 5;
+            var spellSprite = game.add.sprite(x, y, spell.key, undefined, spellGroup);
+            spellSprite.name = 'spell' + spell.key;
+            if (Config.options.gameSize.x - (spellSprite.x + spellSprite.width) < spellSprite.width) {
+                //next row
+                positionX = windowPositionX; //reset positionX
+                positionY = y + spellSprite.height; //increment positionY
+            } else {
+                //same row, just increment positionX;
+                positionX = x + spellSprite.width;
+            }
+        });
+    }
+    
+    function setupCreatureProfiles(game, creatures) {
+        //create windows for creatures
+        var tileSize = Config.options.tileSize;
+        var gameX = Config.options.gameSize.x;
+        var gameY = Config.options.gameSize.y;
+        var dialogSize = {
+            width: gameX / game.creatures.length,
+            height: tileSize * 4 + (gameY % tileSize)
+        }
+        var positionX = 0;
+        var positionY = gameY - dialogSize.height;
+        var offset = 0;
+        _.each(creatures, function(creature) {
+            creature.spritesGroup = game.add.group();
+            var dialogWindow = game.add.sprite(positionX + offset, positionY, 'dialogWindow', undefined, creature.spritesGroup);
+            dialogWindow.width = dialogSize.width;
+            dialogWindow.height = dialogSize.height;
+            dialogWindow.name = 'dialogWindow';
+            
+            //stats
+            var statsGroup = game.add.group(creature.spritesGroup, 'statsGroup');
+            var creatureProfile = game.add.sprite(positionX + offset + 5, positionY + 5, creature.key, undefined, statsGroup);
+            creatureProfile.inputEnabled = true;
+            creatureProfile.name = 'creatureProfile';
+            var healthBarText = game.add.text(offset + creatureProfile.width + 5, positionY + 5, creature.health + '/' + creature.maxHealth, {font: '10px Arial'}, statsGroup);
+            healthBarText.name = 'healthBarText';
+            
+            offset += dialogSize.width;
+        });
+    }
 
     Level.prototype = {
         init: function() {
@@ -21,6 +81,7 @@ define(['phaser',
         },
       
         create: function() {
+            
             game = this.game;
             game.map = game.add.tilemap('level');
             game.map.addTilesetImage('tiles', 'gameTiles');
@@ -37,36 +98,10 @@ define(['phaser',
             game.add.existing(elephant);
             game.add.existing(hydra);
             
-            //create windows for creatures
-            var tileSize = Config.options.tileSize;
-            var gameX = Config.options.gameSize.x;
-            var gameY = Config.options.gameSize.y;
-            var dialogSize = {
-                width: gameX / game.creatures.length,
-                height: tileSize * 4 + (gameY % tileSize)
-            }
-            var positionX = 0;
-            var positionY = gameY - dialogSize.height;
-            var offset = 0;
-            _.each(game.creatures, function(creature) {
-                creature.spritesGroup = game.add.group();
-                var dialogWindow = game.add.sprite(positionX + offset, positionY, 'dialogWindow', undefined, creature.spritesGroup);
-                dialogWindow.width = dialogSize.width;
-                dialogWindow.height = dialogSize.height;
-                dialogWindow.name = 'dialogWindow';
-                
-                //stats
-                var statsGroup = game.add.group(creature.spritesGroup, 'statsGroup');
-                var creatureProfile = game.add.sprite(positionX + offset + 5, positionY + 5, creature.key, undefined, statsGroup);
-                creatureProfile.inputEnabled = true;
-                creatureProfile.name = 'creatureProfile';
-                var healthBarText = game.add.text(offset + creatureProfile.width + 5, positionY + 5, creature.health + '/' + creature.maxHealth, {font: '10px Arial'}, statsGroup);
-                healthBarText.name = 'healthBarText';
-                
-                offset += dialogSize.width;
-            });
+            setupCreatureProfiles(game, game.creatures);
             
             //temporary
+            setupSpells(game, [{key: 'haste'}, {key: 'confuse'}, {key: 'slow'},{key: 'haste'}, {key: 'confuse'}, {key: 'slow'},{key: 'haste'}, {key: 'confuse'}, {key: 'slow'}]);
             game.map.putTile(this.grassHsh.halfMature, 3, 4);
             var tile = game.map.getTile(3, 4);
             tile.properties.type = 'grass';
