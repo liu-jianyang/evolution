@@ -11,50 +11,49 @@ define(['phaser',
     var game, elephant, hydra;
     function Level() {}
     
-    function onMouseover() {
-        console.log('onMouseover');
+    function onMouseover(x) {
+        console.log('onMouseover', x);
     }
     
-    function setupSpells(game, spellArray) {
-        var spellGroup = game.add.group();
-        var windowPositionX = Config.options.gameSize.x - (64 + 15);
-        var windowPositionY = 0;
-        var spellSize = 32;
-        
-        var spellWindow = game.add.sprite(windowPositionX, windowPositionY, 'dialogWindow', undefined, spellGroup);
-        spellWindow.width = 2*spellSize + 15;
-        spellWindow.height = (5 + spellSize) * (Phaser.Math.ceilTo(spellArray.length / 2, 0, 10)) + 5;
-        var positionX = windowPositionX, 
-            positionY = windowPositionY;
-            
-        //TODO: Change positionX and positionY only when there's another element
-        _.each(spellArray, function(spell) {
-            var x = positionX + 5;
-            var y = positionY + 5;
-            var spellSprite = game.add.sprite(x, y, spell.key, undefined, spellGroup);
-            spellSprite.name = 'spell' + spell.key;
-            if (Config.options.gameSize.x - (spellSprite.x + spellSprite.width) < spellSprite.width) {
-                //next row
-                positionX = windowPositionX; //reset positionX
-                positionY = y + spellSprite.height; //increment positionY
-            } else {
-                //same row, just increment positionX;
-                positionX = x + spellSprite.width;
-            }
+    function onMouseUp(sprite, pointer) {
+        console.log('onMouseUp');
+        console.log(sprite, pointer);
+    }
+    
+    function setupSpells(game, spellArray, panelGroup) {
+        var spellPanel = _.find(panelGroup.children, function(child) {
+            return child.name === 'spellPanel';
         });
+        
+        var spellGroup = game.add.group(panelGroup, 'spellGroup');
+        var spellSize = 32;
+        var separation = 5;
+        var positionX = spellPanel.x + separation, 
+            positionY = spellPanel.y + separation;
+            
+        _.each(spellArray, function(spell) {
+            if (positionX >= spellPanel.x + spellPanel.width) {
+                //next row
+                positionX = spellPanel.x + separation;
+                positionY = positionY + spellSize + separation;
+            }
+            var spellSprite = game.add.sprite(positionX, positionY, spell.key, undefined, spellGroup);
+            spellSprite.info = spell.info;
+            spellSprite.inputEnabled = true;
+            spellSprite.events.onInputDown.add(onMouseUp, this);
+            positionX += spellSize + separation;
+        });
+        spellGroup.setAll('input.useHandCursor', true);
     }
     
-    function setupCreatureProfiles(game, creatures) {
+    function setupCreatureProfiles(game, creatures, x, y, width, height) {
         //create windows for creatures
-        var tileSize = Config.options.tileSize;
-        var gameX = Config.options.gameSize.x;
-        var gameY = Config.options.gameSize.y;
         var dialogSize = {
-            width: gameX / game.creatures.length,
-            height: tileSize * 4 + (gameY % tileSize)
+            width: width / game.creatures.length,
+            height: height
         }
-        var positionX = 0;
-        var positionY = gameY - dialogSize.height;
+        var positionX = x;
+        var positionY = y;
         var offset = 0;
         _.each(creatures, function(creature) {
             creature.spritesGroup = game.add.group();
@@ -74,14 +73,31 @@ define(['phaser',
             offset += dialogSize.width;
         });
     }
+    
+    function setupMap(game) {
+        
+    }
+    
+    function setupPanel(game, name, panelKey, x, y, width, height, group) {
+        console.log(panelKey);
+        
+        
+        var sprite = game.add.sprite(x, y, panelKey, undefined, group);
+        sprite.name = name + 'Panel';
+        sprite.width = width;
+        sprite.height = height;
+    }
 
     Level.prototype = {
         init: function() {
             this.game.enableStep();
         },
+        
+        preload: function() {
+            
+        },
       
         create: function() {
-            
             game = this.game;
             game.map = game.add.tilemap('level');
             game.map.addTilesetImage('tiles', 'gameTiles');
@@ -98,10 +114,31 @@ define(['phaser',
             game.add.existing(elephant);
             game.add.existing(hydra);
             
-            setupCreatureProfiles(game, game.creatures);
             
+            setupMap(game);
+            
+            //setup panels
+            var panelGroup = game.add.group();
+            panelGroup.name = 'panelGroup';
+            //setup creature panel
+            var x = 0;
+            var y = Config.options.gameSize.y - (Config.options.tileSize * 4);
+            var width = Config.options.gameSize.x;
+            var height = (Config.options.tileSize * 4);
+            setupPanel(game, 'creatures', 'dialogWindow', x, y, width, height, panelGroup);
+            setupCreatureProfiles(game, game.creatures, x, y, width, height);
+            
+            //setup spell panel
+            setupPanel(game, 'spell', 'dialogWindow', Config.options.gameSize.x - ((Config.options.tileSize * 2) + 15), 0, (Config.options.tileSize * 2) + 15, Config.options.gameSize.y - (Config.options.tileSize * 4), panelGroup);
+            
+            //setup judge panel
+            setupPanel(game, 'judge', 'judgeWindow', 0, 0, Config.options.tileSize * 4, Config.options.tileSize * 5, panelGroup);
+            
+            //setup player panel
+            
+            setupPanel(game, 'player', 'playerWindow', 0, Config.options.tileSize * 5, Config.options.tileSize * 4, Config.options.tileSize * 5, panelGroup);
             //temporary
-            setupSpells(game, [{key: 'haste'}, {key: 'confuse'}, {key: 'slow'},{key: 'haste'}, {key: 'confuse'}, {key: 'slow'},{key: 'haste'}, {key: 'confuse'}, {key: 'slow'}]);
+            setupSpells(game, [{key: 'haste'}, {key: 'confuse'}, {key: 'slow'},{key: 'haste'}, {key: 'confuse'}, {key: 'slow'},{key: 'haste'}, {key: 'confuse'}, {key: 'slow'}], panelGroup);
             game.map.putTile(this.grassHsh.halfMature, 3, 4);
             var tile = game.map.getTile(3, 4);
             tile.properties.type = 'grass';

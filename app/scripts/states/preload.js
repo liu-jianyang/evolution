@@ -19,6 +19,9 @@ define(['phaser', 'config'], function(Phaser, Config) {
             this.load.image('gameTiles', '/app/data/images/sprites/tileset.png');
             this.load.image('dialogWindow', '/app/data/images/sprites/Menu_2.png');
             
+            //stat bars
+            this.load.image('healthBar', '/app/data/images/sprites/blood_red_bar.png');
+            
             //mods
             this.load.image('buff', '/app/data/images/sprites/mods/buff.png');
             this.load.image('debuff', '/app/data/images/sprites/mods/debuff.png');

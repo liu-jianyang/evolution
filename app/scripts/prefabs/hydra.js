@@ -16,15 +16,7 @@ define(['phaser',
         this.setHealth(300);
         this.setAttack(70);
         this.setDefense(35);
-        this.setVisionRange(4);
-        var bt = new BehaviorTree(game, {
-            root: {
-                name: 'MoveTo',
-                type: 'decorator',
-                params: {x: 5, y: 7}
-            }
-        })
-        this.setBehavior(bt.getRoot());
+        this.setVisionRange(10);
     }
 
     Config.inheritPrototype(Hydra, Creature);

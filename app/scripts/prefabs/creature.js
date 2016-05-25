@@ -9,7 +9,12 @@ define(['phaser',
         var trueX = x * Config.options.tileSize;
         var trueY = y * Config.options.tileSize;
         this.sprite = Phaser.Sprite.call(this, game, trueX, trueY, imageRef);
-        
+        var statBars = game.add.group();
+        this.addChild(statBars);
+        var healthBar = game.add.sprite(0, -5, 'healthBar', undefined, statBars);
+        healthBar.width = Config.options.tileSize;
+        healthBar.height = 2;
+
         // this.anchor.setTo(0.5, 0.5);
         this.deadRef = deadRef;
         this.maxHungerLevel = 100;
@@ -57,10 +62,15 @@ define(['phaser',
     };
     
     Creature.prototype.changeHealth = function(amount) {
+        var healthBar = _.find(this.children[0].children, function(child) {
+           return child.key === 'healthBar'; 
+        });
         this.health = Phaser.Math.min(this.maxHealth, this.health + amount);
         if (this.health <= 0) {
             this.die();
         }
+        var percent = this.health / this.maxHealth;
+        healthBar.width = percent * Config.options.tileSize;
     };
     
     Creature.prototype.setHunger = function(hunger) {
@@ -152,8 +162,6 @@ define(['phaser',
             });
             var profile = statsGroup.children[0];
             if (length === 0) {
-                
-                console.log(statsGroup.children);
                 game.add.sprite(profile.x + offset, profile.y + profile.width + offset, mod.type, undefined, modGroup);
                 game.add.sprite(profile.x + offset, profile.y + profile.width + offset, mod.key, undefined, modGroup);
             } else {
